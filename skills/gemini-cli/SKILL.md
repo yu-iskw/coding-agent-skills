@@ -19,7 +19,16 @@ Use this skill to perform coding, research, or automation tasks using the `gemin
 
 ## Implementation Workflow
 
-### 1. Analyze & Classify
+### 1. Quota Verification (Optional but Recommended)
+
+Before initiating tasks, verify the remaining request quota to avoid session suspension.
+
+- **Tools**: Check Google AI Studio or Google Cloud project dashboard for current usage.
+- **Constraints**:
+  - Free/Unpaid: 250 requests/day, 10 requests/minute.
+  - Paid/Enterprise: 1500-2000 requests/day, 120 requests/minute.
+
+### 2. Analyze & Classify
 
 Analyze the user's intent to determine the required permission tier.
 
@@ -37,7 +46,7 @@ Use the `AskQuestion` tool to confirm:
 
 ### 3. Execution
 
-Execute `gemini` using the mode determined by the tier.
+Execute `gemini` using the mode determined by the tier. If resuming a session, you can check `/stats` within the interactive prompt for token usage.
 
 ```bash
 # Tier 0 (Plan)
