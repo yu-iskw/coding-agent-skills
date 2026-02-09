@@ -19,7 +19,14 @@ Use this skill to perform coding, research, or automation tasks using the `claud
 
 ## Implementation Workflow
 
-### 1. Analyze & Classify
+### 1. Budget Verification (Optional but Recommended)
+
+Before initiating complex or long-running tasks, verify the remaining token/cost budget to avoid suspension.
+
+- **Tools**: Use `ccusage daily --json` to check current consumption.
+- **Constraints**: If the daily cost is approaching the limit, alert the user or use the `--max-budget-usd` flag for the session.
+
+### 2. Analyze & Classify
 
 Analyze the user's intent to determine the required permission tier.
 
@@ -37,11 +44,11 @@ Use the `AskQuestion` tool to confirm:
 
 ### 3. Execution
 
-Execute `claude` using the mode determined by the tier.
+Execute `claude` using the mode determined by the tier. Use `--max-budget-usd` for non-interactive tasks where cost control is critical.
 
 ```bash
 # Tier 0 (Plan)
-claude -p "<prompt>" --permission-mode plan
+claude -p "<prompt>" --permission-mode plan --max-budget-usd 1.0
 
 # Tier 1 (Accept Edits)
 claude -p "<prompt>" --permission-mode acceptEdits

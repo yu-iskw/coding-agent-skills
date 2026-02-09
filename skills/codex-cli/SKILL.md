@@ -19,7 +19,16 @@ Use this skill to perform coding tasks, research, or system analysis using the `
 
 ## Implementation Workflow
 
-### 1. Analyze & Classify
+### 1. Quota Verification (Optional but Recommended)
+
+Before initiating tasks, verify the remaining message quota to avoid session suspension.
+
+- **Tools**: Check `codex cloud status` (if applicable) or refer to the ChatGPT plan limits.
+- **Constraints**:
+  - Rolling 5-hour window: ~30-150 messages (Plus) or ~300-1500 messages (Pro).
+  - Heavy local usage reduces available cloud task quota.
+
+### 2. Analyze & Classify
 
 Analyze the user's intent to determine the required permission tier.
 
