@@ -48,26 +48,30 @@ Use the `AskQuestion` tool to confirm:
 
 ### 4. Execution
 
-Execute `codex` using the flags corresponding to the tier. Use `-q` for non-interactive quiet output.
+Execute `codex` using the flags corresponding to the tier. Always specify `--sandbox <mode>` explicitly.
 
 ```bash
-# Tier 0 (Suggest — default mode, proposes all changes before applying)
-codex "<prompt>"
+# Tier 0 (Suggest + read-only sandbox — cannot write files or execute commands)
+codex --sandbox read-only "<prompt>"
 
 # Tier 0 (non-interactive quiet output)
-codex -q "<prompt>"
+codex --sandbox read-only -q "<prompt>"
 
-# Tier 1 (Auto-Edit — applies file edits automatically, prompts for shell)
-codex --auto-edit "<prompt>"
+# Tier 1 (Auto-Edit + workspace-write sandbox — writes confined to workspace, network off)
+codex --sandbox workspace-write --auto-edit "<prompt>"
 
-# Tier 2 (Full-Auto — edits + shell in sandbox, no prompts)
+# Tier 2 (Full-Auto — workspace-write sandbox + on-request approval)
 codex --full-auto "<prompt>"
+# Equivalent: codex --sandbox workspace-write --ask-for-approval on-request "<prompt>"
 ```
 
 **Security Rules:**
 
-- **NEVER** use `--dangerously-bypass-approvals-and-sandbox` without explicit confirmation of the risks.
-- **ALWAYS** use the most restrictive mode possible (prefer `suggest`).
+- **ALWAYS** specify `--sandbox <mode>` explicitly rather than relying on defaults.
+- For Tier 0, `--sandbox read-only` is mandatory: Codex cannot write or execute any commands.
+- Network access is disabled by default in `workspace-write` mode; only enable via `config.toml` when explicitly required.
+- **NEVER** use `--sandbox danger-full-access` or `--dangerously-bypass-approvals-and-sandbox` without explicit confirmation of the risks.
+- **ALWAYS** use the most restrictive mode possible (prefer `suggest` + `read-only`).
 - If you are unsure, default to Tier 0 and escalate only if `codex` reports it cannot complete the task.
 
 ## Configuration

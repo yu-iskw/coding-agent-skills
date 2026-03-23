@@ -35,6 +35,12 @@ Use the `AskQuestion` tool to confirm:
 
 > "I've detected that this task requires full agent permissions to modify files and execute commands. OK to proceed with `cursor-agent`?"
 
+**Built-in security posture (no flags required):**
+
+- **Sandbox on by default:** OS-level sandboxing is enabled automatically on macOS, Linux, and Windows since early 2026. No `--sandbox` flag is needed.
+- **Network restricted by default:** Outbound access is limited to GitHub, select web-search providers, and explicitly user-approved links. All other outbound requests are blocked.
+- **MCP approval required:** Every third-party MCP connection triggers an explicit user-approval prompt. Always inspect available tools with `cursor-agent mcp list-tools <id>` before approving any MCP server.
+
 ### 3. Execution
 
 Execute `cursor-agent` using the determined mode. Use `--print` for non-interactive output suitable for the calling agent.

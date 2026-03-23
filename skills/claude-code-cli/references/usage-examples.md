@@ -2,14 +2,15 @@
 
 This reference provides concrete examples of how to apply the permission tiers when using the `claude` CLI through this skill.
 
-## Tier 0: Analysis & Research (Mode: `plan`)
+## Tier 0: Analysis & Research (Mode: `plan` + `--sandbox`)
 
 **Intent**: "Summarize the architecture of this project."
-**Logic**: No changes or commands needed. Safe read-only analysis.
+**Logic**: No changes or commands needed. Safe read-only analysis with OS-level sandbox and shell blocked.
 **Command**:
 
 ```bash
-claude -p "Summarize the project architecture in README.md and the directory structure." --permission-mode plan
+claude -p "Summarize the project architecture in README.md and the directory structure." \
+  --permission-mode plan --sandbox --disallowedTools Bash
 ```
 
 **Intent**: "Research the current state of Model Context Protocol (MCP) in early 2026."
@@ -17,29 +18,32 @@ claude -p "Summarize the project architecture in README.md and the directory str
 **Command**:
 
 ```bash
-claude -p "What is the current version and main features of MCP as of February 2026?" --permission-mode plan
+claude -p "What is the current version and main features of MCP as of February 2026?" \
+  --permission-mode plan --sandbox --disallowedTools Bash
 ```
 
-## Tier 1: Workspace Modification (Mode: `acceptEdits`)
+## Tier 1: Workspace Modification (Mode: `acceptEdits` + `--sandbox`)
 
 **Intent**: "Fix all typos in the documentation files."
-**Logic**: Modifies files automatically but does not run external tools without prompt.
+**Logic**: Modifies files automatically; shell is gated behind prompts; OS-level sandbox isolates the process.
 **Approval Required**: Yes.
 **Command**:
 
 ```bash
-claude -p "Find and fix spelling and grammar errors in all .md files in the docs/ directory." --permission-mode acceptEdits
+claude -p "Find and fix spelling and grammar errors in all .md files in the docs/ directory." \
+  --permission-mode acceptEdits --sandbox
 ```
 
 ## Tier 2: Autonomous Execution (Mode: `bypassPermissions`)
 
 **Intent**: "Update dependencies and ensure the build still passes."
-**Logic**: Modifies files AND executes build/test commands without interruption.
+**Logic**: Modifies files AND executes build/test commands without interruption. `--sandbox` is omitted because shell commands must run freely; confine to a dedicated container or VM instead.
 **Approval Required**: Yes (High Risk).
 **Command**:
 
 ```bash
-claude -p "Update all dependencies to their latest compatible versions and run 'make build' to verify." --permission-mode bypassPermissions
+claude -p "Update all dependencies to their latest compatible versions and run 'make build' to verify." \
+  --permission-mode bypassPermissions
 ```
 
 **Intent**: "Identify and fix the failing unit test in tests/test_api.py."
@@ -48,7 +52,8 @@ claude -p "Update all dependencies to their latest compatible versions and run '
 **Command**:
 
 ```bash
-claude -p "Run tests/test_api.py, analyze the failure, and fix the underlying issue." --permission-mode bypassPermissions
+claude -p "Run tests/test_api.py, analyze the failure, and fix the underlying issue." \
+  --permission-mode bypassPermissions
 ```
 
 ## Cloud Execution *(research preview)*

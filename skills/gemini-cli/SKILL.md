@@ -49,19 +49,21 @@ Use the `AskQuestion` tool to confirm:
 Execute `gemini` using the mode determined by the tier. If resuming a session, you can check `/stats` within the interactive prompt for token usage.
 
 ```bash
-# Tier 0 (Plan — experimental read-only mode)
+# Tier 0 (Plan — experimental read-only + sandbox)
 gemini -p "<prompt>" --approval-mode plan --sandbox
 
-# Tier 1 (Auto-Edit)
-gemini -p "<prompt>" --approval-mode auto_edit
+# Tier 1 (Auto-Edit + sandbox — file edits allowed, shell gated, sandboxed)
+gemini -p "<prompt>" --approval-mode auto_edit --sandbox
 
-# Tier 2 (YOLO — shorthand flag also available)
+# Tier 2 (YOLO — sandbox is auto-enabled by --yolo)
 gemini -p "<prompt>" --yolo
-# equivalent: gemini -p "<prompt>" --approval-mode yolo
+# equivalent: gemini -p "<prompt>" --approval-mode yolo  (sandbox auto-enabled)
 ```
 
 **Security Rules:**
 
+- **ALWAYS** pass `--sandbox` for Tier 0 and Tier 1. `--yolo` enables it automatically for Tier 2.
+- Default sandbox backend uses Seatbelt (macOS) or bubblewrap (Linux). For stronger isolation, use `GEMINI_SANDBOX=docker` (requires Docker installed).
 - **NEVER** use `--yolo` / `--approval-mode yolo` without explicit confirmation of the risks.
 - **ALWAYS** use the most restrictive mode possible (prefer `plan`).
 - If you are unsure, default to `plan` and escalate only if `gemini` reports it cannot complete the task.
@@ -76,10 +78,30 @@ This skill leverages native `gemini` CLI flags to enforce the permission tiers.
 The default model is `gemini-2.5-pro`. Switch to `gemini-2.5-flash` for faster, lower-cost responses:
 
 ```bash
-gemini -m gemini-2.5-flash -p "<prompt>" --approval-mode plan
+gemini -m gemini-2.5-flash -p "<prompt>" --approval-mode plan --sandbox
 ```
 
 Available models: `gemini-2.5-pro` (default, 1M token context), `gemini-2.5-flash` (fast fallback), `gemini-3-flash`.
+
+### Sandbox Backend and Network
+
+For stronger container-level isolation use Docker as the sandbox backend:
+
+```bash
+GEMINI_SANDBOX=docker gemini -p "<prompt>" --approval-mode auto_edit --sandbox
+```
+
+Disable network access inside the sandbox via `settings.json`:
+
+```json
+{
+  "tools": {
+    "sandboxNetworkAccess": false
+  }
+}
+```
+
+`sandboxNetworkAccess` defaults to `false` when sandbox is enabled — set it explicitly to make the policy auditable.
 
 ## Remote Subagents *(experimental — v0.33.0+)*
 

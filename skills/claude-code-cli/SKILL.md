@@ -48,18 +48,21 @@ Use the `AskQuestion` tool to confirm:
 Execute `claude` using the mode determined by the tier. Use `--max-budget-usd` for non-interactive tasks where cost control is critical.
 
 ```bash
-# Tier 0 (Plan)
-claude -p "<prompt>" --permission-mode plan --max-budget-usd 1.0
+# Tier 0 (Plan + sandbox — read-only, OS-level isolation, shell blocked)
+claude -p "<prompt>" --permission-mode plan --sandbox \
+  --disallowedTools Bash --max-budget-usd 1.0
 
-# Tier 1 (Accept Edits)
-claude -p "<prompt>" --permission-mode acceptEdits
+# Tier 1 (Accept Edits + sandbox — file writes allowed, shell gated, OS-level isolation)
+claude -p "<prompt>" --permission-mode acceptEdits --sandbox
 
-# Tier 2 (Bypass Permissions)
+# Tier 2 (Bypass Permissions — sandbox omitted; must run shell commands freely)
 claude -p "<prompt>" --permission-mode bypassPermissions
 ```
 
 **Security Rules:**
 
+- **ALWAYS** pass `--sandbox` for Tier 0 and Tier 1. Skip only when OS prerequisites are unavailable (Linux requires `bubblewrap` + `socat`: `sudo apt-get install bubblewrap socat`; macOS uses built-in Seatbelt).
+- For Tier 0, also pass `--disallowedTools Bash` to block shell execution at the tool layer.
 - **NEVER** use `--permission-mode bypassPermissions` without explicit confirmation of the risks.
 - **ALWAYS** use the most restrictive mode possible (prefer `plan`).
 - If you are unsure, default to `plan` and escalate only if `claude` reports it cannot complete the task.
