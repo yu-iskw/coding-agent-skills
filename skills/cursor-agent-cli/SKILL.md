@@ -86,6 +86,29 @@ The agent continues running asynchronously. Pick up the conversation at `cursor.
 
 This skill uses native `cursor-agent` flags. Ensure `CURSOR_API_KEY` is set in the environment if required, or run `cursor-agent login` first.
 
+### Model Selection
+
+Cursor supports models from multiple providers. The active model depends on your subscription tier (defaults to Cursor's proprietary **Composer 2 Fast** or GPT-5.3-Codex on most paid plans). Switch models at any time via the in-session model picker, or set `CURSOR_MODEL` in the environment:
+
+```bash
+CURSOR_MODEL=claude-sonnet-4-6 cursor-agent --print "<prompt>"
+```
+
+Available providers: OpenAI (GPT-5.x), Anthropic (Claude Opus/Sonnet/Haiku 4.x), Google (Gemini 2.5/3), Cursor (Composer 2 Fast), DeepSeek, and local models.
+
+## Automations *(Cloud — GA Mar 2026)*
+
+**Cursor Automations** are always-on cloud agents triggered by external events. They run in an isolated cloud sandbox with your configured MCPs, automatically verify their output, and post results (e.g., comments, PRs).
+
+**Supported triggers:** GitHub PR opened/updated, Slack message, Linear issue created, PagerDuty alert, cron schedule, webhook.
+
+Configure automations at `cursor.com/settings/automations`.
+
+**Example automation uses:**
+- Auto-review every PR for security issues and post a summary comment
+- Triage Linear issues and assign labels based on content
+- On PagerDuty alert: investigate recent commits, identify likely culprit, open a fix PR
+
 ## Examples
 
 Refer to [references/usage-examples.md](./references/usage-examples.md) for concrete scenarios.

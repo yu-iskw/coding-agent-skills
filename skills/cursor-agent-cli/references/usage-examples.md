@@ -80,3 +80,16 @@ cursor-agent ls
 ```
 
 The agent hands off to Cursor's Cloud Agent and continues asynchronously. Resume at `cursor.com/agents`.
+
+## Scenario 8: Cursor Automation for PR Review
+
+**User Intent**: "Automatically review every PR for security issues."
+
+**Setup** (configure once at `cursor.com/settings/automations`):
+
+- **Trigger**: GitHub — PR opened or updated
+- **Instructions**: "Review the diff for security vulnerabilities (OWASP Top 10, injection, insecure dependencies). Post a comment summarizing any findings and their severity. Label the PR `security-review-needed` if critical issues are found."
+- **MCPs**: GitHub (for PR comments and labels)
+- **Verify output**: Check that a comment is posted before marking complete
+
+Once configured, the automation runs in a cloud sandbox on every PR without any manual intervention.

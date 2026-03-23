@@ -76,6 +76,34 @@ Codex resolves config in precedence order: CLI flags → profile → project `.c
 
 For project-level guidance (team standards, style rules), create an `AGENTS.md` file at the repo root. Codex loads it automatically, similar to `CLAUDE.md` in Claude Code.
 
+### Model Selection
+
+The default model is `gpt-5.3-codex`. Override via `config.toml` or the `-m` flag:
+
+```bash
+codex -m gpt-5.4 "<prompt>"
+```
+
+Available models: `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex`, `gpt-5.3-codex-spark` (text-only, near-instant iteration).
+
+## Cloud Agent Handoff
+
+Codex can run tasks on OpenAI's cloud infrastructure without tying up your local machine.
+
+```bash
+# Launch a task in the cloud
+codex cloud "<task>"
+
+# Browse active and completed cloud tasks
+codex cloud -l
+
+# Apply resulting diffs to your local workspace
+codex cloud -a
+```
+
+> Cloud containers are cached for up to **12 hours** after a task completes, making follow-up tasks fast.
+> Completed task diffs are staged as a branch; review before merging.
+
 ## Examples
 
 Refer to [references/usage-examples.md](./references/usage-examples.md) for concrete scenarios.

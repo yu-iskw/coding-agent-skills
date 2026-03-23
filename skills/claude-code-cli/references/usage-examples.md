@@ -50,3 +50,30 @@ claude -p "Update all dependencies to their latest compatible versions and run '
 ```bash
 claude -p "Run tests/test_api.py, analyze the failure, and fix the underlying issue." --permission-mode bypassPermissions
 ```
+
+## Cloud Execution *(research preview)*
+
+**Intent**: "Run a long database migration while I'm away."
+**Logic**: Offloads the task to an Anthropic-managed VM so it continues even if the local machine is closed.
+**Approval Required**: Yes (runs `--dangerously-skip-permissions` by default in cloud).
+
+```bash
+claude --remote "Run the database migration in scripts/migrate.py, execute the full test suite, and open a PR if all tests pass."
+```
+
+Monitor progress from `claude.ai/code` or with `/tasks` in any interactive session.
+
+## Remote Control *(GA — Feb 2026)*
+
+**Intent**: "Resume the same coding session from my phone."
+**Logic**: Code stays on your local machine; Remote Control provides synchronized access from any device.
+
+```bash
+# From terminal: pull a web session back to the local CLI
+claude --teleport
+
+# Resume a specific session by ID
+claude --teleport <session-id>
+```
+
+Open `claude.ai/code` on any device to start monitoring, then use `--teleport` to take back control from the terminal.

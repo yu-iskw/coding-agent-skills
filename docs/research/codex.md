@@ -322,6 +322,28 @@ All keys shown above are documented in the config reference (and the sandbox/app
 
 ⸻
 
+J. Cloud Execution (`codex cloud`)
+
+Goal: Run tasks on OpenAI's cloud infrastructure without occupying your local machine.
+
+```bash
+# Launch a cloud task
+codex cloud "<task>"
+
+# Browse active and completed cloud tasks
+codex cloud -l
+
+# Apply resulting diffs to your local workspace
+codex cloud -a
+```
+
+Key properties:
+• Cloud containers are cached for **12 hours** after completion — follow-up tasks start almost instantly.
+• Results are delivered as a diff on a branch; review and merge locally.
+• Combined with `codex cloud -a`, this replaces the manual diff-review step.
+
+⸻
+
 How I validated this (so you can trust it)
 • Cross-checked feature surfaces (interactive, resume, exec) in the official CLI feature/reference docs. ￼
 • Used the official Configuration Reference for authoritative key names and allowed values. ￼

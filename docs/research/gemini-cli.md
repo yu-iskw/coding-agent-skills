@@ -180,7 +180,37 @@ A concrete “best-practice” settings.json starter (adapt as needed)
 
 ⸻
 
-E. New Configuration Options (March 2026)
+E. Remote Subagents via A2A Protocol *(experimental — v0.33.0, March 2026)*
+
+Gemini CLI can delegate subtasks to remote agents via the **Agent-to-Agent (A2A) protocol** (JSON-RPC 2.0 over HTTPS, version 0.3). This enables multi-agent orchestration without leaving the Gemini CLI session.
+
+Three-agent model:
+1. **User agent**: Triggers the top-level task
+2. **Client agent**: Solicits and delivers tasks on behalf of the user
+3. **Remote agent**: Executes the delegated task and relays results
+
+Key properties:
+• Every agent publishes `/.well-known/agent.json` (endpoint, skills, auth method)
+• Short-lived tokens: scoped per task, expiring in minutes
+• HTTP auth for remote agents added in v0.33.0
+• Version 0.3 adds gRPC support and security card signing
+• Interoperable with any A2A-compatible agent (specification at https://a2a-protocol.org/)
+
+Usage:
+
+```bash
+# Enable experimental A2A / agent coordination protocol
+gemini -p "<task>" --experimental-acp
+
+# View active subagents in interactive mode
+/subagents
+```
+
+Best practice: Only enable `--experimental-acp` in environments where you control or trust the remote agent endpoints. Use `tools.exclude` in settings to restrict what remote agents can access.
+
+⸻
+
+F. New Configuration Options (March 2026)
 
 Several new settings are available in recent Gemini CLI releases:
 

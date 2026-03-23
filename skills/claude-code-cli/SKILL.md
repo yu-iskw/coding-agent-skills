@@ -67,7 +67,62 @@ claude -p "<prompt>" --permission-mode bypassPermissions
 
 ## Configuration
 
-This skill leverages native `claude` CLI flags to enforce the permission tiers. No additional configuration files are required.
+This skill leverages native `claude` CLI flags to enforce the permission tiers.
+
+### Model Selection
+
+The default model depends on your Claude plan:
+
+| Plan | Default Model | Shorthand |
+| :--- | :------------ | :-------- |
+| Max / Team / Enterprise | `claude-opus-4-6` | `opus` |
+| Pro | `claude-sonnet-4-6` | `sonnet` |
+
+Override at invocation time with `--model <shorthand-or-id>`, or change mid-session with `/model <shorthand>`:
+
+```bash
+claude --model sonnet -p "<prompt>" --permission-mode plan
+claude --model opus   -p "<prompt>" --permission-mode acceptEdits
+```
+
+Available model IDs: `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4-5`.
+
+## Cloud Agent Handoff
+
+Claude Code offers two remote execution modes beyond local CLI.
+
+### Cloud Execution *(research preview — Pro / Max / Team / Enterprise)*
+
+Tasks run on Anthropic-managed VMs with pre-installed runtimes. Code is cloned to an isolated container; no local machine required.
+
+```bash
+# Kick off a cloud task
+claude --remote "<task>"
+
+# Monitor all running cloud tasks (in any interactive session)
+/tasks
+```
+
+> **Security note:** Cloud tasks run with `--dangerously-skip-permissions` by default.
+> Only committed repo hooks and a `setup.sh` script apply; user-level `settings.json` is ignored.
+> Use for well-defined, async tasks where local oversight is not required.
+
+### Remote Control *(GA — Feb 2026)*
+
+Code stays on your local machine. Remote Control synchronizes access so you can monitor and steer the same agent session from another device (phone, tablet, web at `claude.ai/code`).
+
+```bash
+# Pull a web or mobile session back to your terminal
+claude --teleport
+claude --teleport <session-id>
+```
+
+| | Cloud Execution | Remote Control |
+| :--- | :--- | :--- |
+| **Where code runs** | Anthropic VM | Your local machine |
+| **Parallelism** | Multiple tasks | Single session |
+| **Offline continuation** | Yes | No (requires local machine) |
+| **Permissions** | `dangerously-skip-permissions` | Respects local settings |
 
 ## Examples
 

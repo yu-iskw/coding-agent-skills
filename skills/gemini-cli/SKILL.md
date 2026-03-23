@@ -69,7 +69,32 @@ gemini -p "<prompt>" --yolo
 
 ## Configuration
 
-This skill leverages native `gemini` CLI flags to enforce the permission tiers. No additional configuration files are required.
+This skill leverages native `gemini` CLI flags to enforce the permission tiers.
+
+### Model Selection
+
+The default model is `gemini-2.5-pro`. Switch to `gemini-2.5-flash` for faster, lower-cost responses:
+
+```bash
+gemini -m gemini-2.5-flash -p "<prompt>" --approval-mode plan
+```
+
+Available models: `gemini-2.5-pro` (default, 1M token context), `gemini-2.5-flash` (fast fallback), `gemini-3-flash`.
+
+## Remote Subagents *(experimental — v0.33.0+)*
+
+Gemini CLI can delegate subtasks to remote agents via the **Agent-to-Agent (A2A) protocol** (JSON-RPC 2.0 over HTTPS). Delegation happens automatically when the main agent determines that a specialized subagent is better suited for a portion of the task.
+
+```bash
+# Enable experimental A2A features
+gemini -p "<prompt>" --experimental-acp
+
+# View active subagents in interactive mode
+/subagents
+```
+
+> Remote subagents use short-lived scoped tokens (expire in minutes) and communicate over authenticated HTTPS.
+> Use `--experimental-acp` only in environments where you trust the remote agent endpoints.
 
 ## Examples
 

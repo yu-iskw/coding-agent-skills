@@ -50,3 +50,20 @@ codex --full-auto "Update all python dependencies to their latest compatible ver
 ```bash
 codex --full-auto "Run tests/test_api.py, analyze the failure, and fix the underlying issue."
 ```
+
+## Cloud Execution (`codex cloud`)
+
+**Intent**: "Run a full migration and test suite without tying up my local machine."
+**Logic**: Offloads the task to OpenAI cloud infrastructure; diffs are applied locally when complete.
+**Approval Required**: Yes.
+
+```bash
+# Launch the task on OpenAI cloud
+codex cloud "Run the database migration in scripts/migrate.py, execute the full test suite, and create a PR if tests pass."
+
+# List and monitor running cloud tasks
+codex cloud -l
+
+# Apply resulting diffs to local workspace
+codex cloud -a
+```
