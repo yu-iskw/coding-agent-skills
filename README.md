@@ -40,3 +40,56 @@ This repository includes the following coding agent skills:
 - **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Read-Only, Editor, or Autonomous) based on the user's request and handles security approvals.
 - **[gemini-cli](skills/gemini-cli/)**: Executes tasks using the Gemini CLI (`gemini`). Automatically determines the safest approval mode (plan, auto_edit, or yolo) based on the task type.
 <!-- END-SKILLS -->
+
+## Claude Code Plugin
+
+This repository is published as a Claude Code plugin. Install it to use the skills
+directly from within any Claude Code session.
+
+### Option 1: Via Custom Marketplace (Recommended)
+
+Add this repository as a custom marketplace, then install the plugin:
+
+```
+/plugin marketplace add yu-iskw/coding-agent-skills
+/plugin install coding-agent-skills@coding-agent-skills
+```
+
+### Option 2: Direct Install
+
+Install the plugin directly from GitHub without adding the marketplace:
+
+```
+/plugin install yu-iskw/coding-agent-skills
+```
+
+### Option 3: Project Settings
+
+To enable the plugin for all members of a project, add the following to
+`.claude/settings.json` in your repository:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "coding-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "yu-iskw/coding-agent-skills"
+      }
+    }
+  },
+  "enabledPlugins": ["coding-agent-skills@coding-agent-skills"]
+}
+```
+
+### Invoking Skills
+
+Once installed, skills are available under the `coding-agent-skills` namespace:
+
+```
+/coding-agent-skills:orchestrating-parallel-tasks
+/coding-agent-skills:claude-code-cli
+/coding-agent-skills:codex-cli
+/coding-agent-skills:gemini-cli
+/coding-agent-skills:cursor-agent-cli
+```
