@@ -20,26 +20,34 @@ gemini -p "Summarize the project architecture in README.md and the directory str
 gemini -p "What is the current version and main features of MCP as of February 2026?" --approval-mode plan --sandbox
 ```
 
-## Tier 1: Workspace Modification (Mode: `auto_edit`)
+## Tier 1: Workspace Modification (Mode: `auto_edit` + `--sandbox`)
 
 **Intent**: "Fix all typos in the documentation files."
-**Logic**: Modifies files automatically but does not run external tools without prompt.
+**Logic**: Modifies files automatically; shell commands still require approval; sandbox isolates the process.
 **Approval Required**: Yes.
 **Command**:
 
 ```bash
-gemini -p "Find and fix spelling and grammar errors in all .md files in the docs/ directory." --approval-mode auto_edit
+gemini -p "Find and fix spelling and grammar errors in all .md files in the docs/ directory." \
+  --approval-mode auto_edit --sandbox
+```
+
+For stronger container-level isolation (requires Docker):
+
+```bash
+GEMINI_SANDBOX=docker gemini -p "Find and fix spelling and grammar errors in all .md files in the docs/ directory." \
+  --approval-mode auto_edit --sandbox
 ```
 
 ## Tier 2: Autonomous Execution (Mode: `yolo`)
 
 **Intent**: "Update dependencies and ensure the build still passes."
-**Logic**: Modifies files AND executes build/test commands without interruption.
+**Logic**: Modifies files AND executes build/test commands without interruption. `--yolo` auto-enables sandbox.
 **Approval Required**: Yes (High Risk).
 **Command**:
 
 ```bash
-gemini -p "Update all dependencies to their latest compatible versions and run 'make build' to verify." --approval-mode yolo
+gemini -p "Update all dependencies to their latest compatible versions and run 'make build' to verify." --yolo
 ```
 
 **Intent**: "Identify and fix the failing unit test in tests/test_api.py."
@@ -48,5 +56,5 @@ gemini -p "Update all dependencies to their latest compatible versions and run '
 **Command**:
 
 ```bash
-gemini -p "Run tests/test_api.py, analyze the failure, and fix the underlying issue." --approval-mode yolo
+gemini -p "Run tests/test_api.py, analyze the failure, and fix the underlying issue." --yolo
 ```

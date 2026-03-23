@@ -1,6 +1,6 @@
 # Claude Code Research
 
-Executive summary (as of February 2, 2026)
+Executive summary (as of March 2026)
 • Claude Code is a terminal-based agent designed for high-autonomy coding tasks, including reading, editing, and executing code within a repository.
 • The tool is built on a robust permission-gated architecture that balances developer speed with security governance.
 • Core advanced features include: 1. **Multi-layer Configuration**: Precise control via managed, project, and user settings. 2. **Permission Modes**: Tailored autonomy levels from "read-only" to "untrusted command gating." 3. **Subagents**: On-the-fly creation of specialized agents via dynamic JSON definitions. 4. **Plugin Ecosystem**: A marketplace-driven model for extending tools and lifecycle behaviors. 5. **MCP Integration**: Native support for the Model Context Protocol (STDIO, SSE, and HTTP).
@@ -130,6 +130,56 @@ D. Custom Slash Commands
 You can define reusable workflows in `.claude/commands/`.
 • These appear as `/name` in the interactive TUI.
 • Useful for "pre-flight checks", "automated tests", or "formatting" that you want the agent to perform consistently.
+
+⸻
+
+E. Model Selection
+
+Claude Code's default model is plan-dependent. Override at any time with `--model <shorthand-or-id>` or in `.claude/settings.json`:
+
+Plan Default Model Shorthand
+Max / Team / Enterprise claude-opus-4-6 (1M context) opus
+Pro claude-sonnet-4-6 sonnet
+Any (fast/budget) claude-haiku-4-5 haiku
+
+```bash
+# Use Sonnet for bulk refactors to save cost
+claude --model sonnet -p “<prompt>” --permission-mode acceptEdits
+
+# Use Opus for complex architectural analysis
+claude --model opus -p “<prompt>” --permission-mode plan
+```
+
+Use `/model <shorthand>` inside an interactive session to switch without restarting.
+
+⸻
+
+F. Cloud Execution and Remote Control (March 2026)
+
+**Cloud Execution** *(research preview — Pro / Max / Team / Enterprise)*
+Tasks run on Anthropic-managed VMs in isolated containers. No local machine required.
+
+- Launch: `claude --remote “<task>”`
+- Monitor: `/tasks` in any interactive session
+- Default permission: `--dangerously-skip-permissions` (deny list not enforced in cloud)
+- Only committed repo hooks and a `setup.sh` script apply
+- VM includes Python, Node.js, Ruby, Go, Rust, PostgreSQL, Redis, and common build tools
+- Network access: limited allowlist (package registries, GitHub, cloud platforms); configurable
+
+**Remote Control** *(GA — Feb 2026)*
+Code stays on your local machine. Provides synchronized multi-device access.
+
+- Handoff: `/teleport` or `claude --teleport [session-id]`
+- Code runs locally; phone/tablet/web can monitor and steer the same session
+- Full `settings.json` deny rules enforced (unlike Cloud Execution)
+
+Comparison:
+
+Aspect Cloud Execution Remote Control
+Where code runs Anthropic VM Your local machine
+Parallelism Multiple tasks simultaneously Single session
+Offline continuation Yes (task persists) No (local machine must stay on)
+Permissions dangerously-skip-permissions by default Respects local settings.json
 
 ⸻
 

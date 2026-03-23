@@ -51,3 +51,45 @@ cursor-agent mcp list-tools google-search
 ```bash
 cursor-agent generate-rule "Ensure all API endpoints follow the RFC 7807 problem details standard for error responses."
 ```
+
+## Scenario 6: Resuming a Prior Session
+
+**User Intent**: "Continue from where I left off in the last session."
+
+**Command**:
+
+```bash
+# Resume the most recent conversation
+cursor-agent --resume
+
+# Resume a specific conversation by thread ID
+cursor-agent --resume <thread-id>
+
+# List all available prior conversations
+cursor-agent ls
+```
+
+## Scenario 7: Cloud Handoff for Background Execution
+
+**User Intent**: "Start this long-running migration task and let it continue while I'm away."
+
+**Usage** (within interactive `cursor-agent` session):
+
+```text
+& Run the full database migration, execute all integration tests, and open a PR if tests pass.
+```
+
+The agent hands off to Cursor's Cloud Agent and continues asynchronously. Resume at `cursor.com/agents`.
+
+## Scenario 8: Cursor Automation for PR Review
+
+**User Intent**: "Automatically review every PR for security issues."
+
+**Setup** (configure once at `cursor.com/settings/automations`):
+
+- **Trigger**: GitHub — PR opened or updated
+- **Instructions**: "Review the diff for security vulnerabilities (OWASP Top 10, injection, insecure dependencies). Post a comment summarizing any findings and their severity. Label the PR `security-review-needed` if critical issues are found."
+- **MCPs**: GitHub (for PR comments and labels)
+- **Verify output**: Check that a comment is posted before marking complete
+
+Once configured, the automation runs in a cloud sandbox on every PR without any manual intervention.

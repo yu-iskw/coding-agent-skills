@@ -1,9 +1,13 @@
 # Codex Research
 
-Executive summary (as of January 31, 2026)
-• Codex CLI (from OpenAI) is a local coding agent that can read, edit, and run code in your repo, with a configurable sandbox + approval model to control autonomy. ￼
-• The most “advanced” power comes from combining: 1. non-interactive automation (codex exec streaming stdout/JSONL), ￼ 2. profiles + layered config (user + project + overrides), ￼ 3. MCP integrations (bring in third-party tools/context safely), ￼ 4. rules/execpolicy (control which commands can run “outside the sandbox”), ￼ 5. skills (packaged, reusable workflows). ￼
-• Below you’ll find 10 advanced use cases and a best-practice configuration playbook (security- and team-friendly), grounded in the official docs and the repo’s published defaults. ￼
+Executive summary (as of March 2026)
+• Codex CLI (from OpenAI) is a local coding agent that can read, edit, and run code in your repo, with a configurable sandbox + approval model to control autonomy.
+• **The CLI has been rewritten in Rust (v0.106.0+).** The TypeScript implementation is now legacy. Install the current version via `npm i -g @openai/codex` or `brew install --cask codex`.
+• **Approval mode names changed:** `suggest` (read-only/propose), `auto-edit` (file edits auto-approved), `full-auto` (edits + shell in sandbox). Flags: `--suggest`, `--auto-edit`, `--full-auto`.
+• **Default model:** `o4-mini` (the `gpt-5.2-codex` value in older research was from an early draft and is now outdated).
+• **Project guidance:** Use `AGENTS.md` at the repo root (or `~/.codex/AGENTS.md` globally) to define project standards — equivalent to `CLAUDE.md` in Claude Code.
+• The most “advanced” power comes from combining: 1. non-interactive automation (codex exec streaming stdout/JSONL), 2. profiles + layered config (user + project + overrides), 3. MCP integrations (bring in third-party tools/context safely), 4. rules/execpolicy (control which commands can run “outside the sandbox”), 5. skills (packaged, reusable workflows).
+• Below you’ll find 10 advanced use cases and a best-practice configuration playbook (security- and team-friendly), grounded in the official docs and the repo’s published defaults.
 
 ⸻
 
@@ -156,9 +160,9 @@ Codex documents common safe combinations and what they imply. ￼
 Comparison table: sandbox modes (recommended mental model)
 
 Mode What it enables Best for Main risks / notes
-read-only read files, answer questions audits, code review, CI commenting no edits; safest default ￼
-workspace-write edit within workspace; optional network in sandbox day-to-day dev with guardrails still gate “untrusted” commands; consider disabling network unless needed ￼
-danger-full-access / --yolo full access, no sandbox controlled containers only explicitly “use caution / not recommended” ￼
+read-only (suggest) read files, answer questions audits, code review, CI commenting no edits; safest default
+workspace-write (auto-edit) edit within workspace; optional network in sandbox day-to-day dev with guardrails still gate “untrusted” commands; consider disabling network unless needed
+danger-full-access (full-auto) full access, no sandbox controlled containers only explicitly “use caution / not recommended”
 
 Best-practice default (most teams):
 • sandbox_mode = "workspace-write"
@@ -191,9 +195,9 @@ Best practice:
 
 D. Control model + reasoning intentionally (cost / latency vs capability)
 
-Defaults (from the official sample config):
-• model = "gpt-5.2-codex"
-• model_provider = "openai" ￼
+Defaults (as of March 2026):
+• model = "o4-mini"
+• model_provider = "openai"
 
 Recommended approach:
 • Keep default for normal coding
@@ -265,9 +269,9 @@ A concrete “best-practice” config.toml starter (adapt as needed)
 
 ################################################################################
 
-## Model defaults (sample config indicates gpt-5.2-codex is default)
+## Model defaults (o4-mini as of March 2026)
 
-model = "gpt-5.2-codex"
+model = "o4-mini"
 model_provider = "openai"
 
 ## Guardrails
@@ -315,6 +319,28 @@ network_access = true
 web_search = "live"
 
 All keys shown above are documented in the config reference (and the sandbox/approval combos are explicitly described in the security guide). ￼
+
+⸻
+
+J. Cloud Execution (`codex cloud`)
+
+Goal: Run tasks on OpenAI's cloud infrastructure without occupying your local machine.
+
+```bash
+# Launch a cloud task
+codex cloud "<task>"
+
+# Browse active and completed cloud tasks
+codex cloud -l
+
+# Apply resulting diffs to your local workspace
+codex cloud -a
+```
+
+Key properties:
+• Cloud containers are cached for **12 hours** after completion — follow-up tasks start almost instantly.
+• Results are delivered as a diff on a branch; review and merge locally.
+• Combined with `codex cloud -a`, this replaces the manual diff-review step.
 
 ⸻
 

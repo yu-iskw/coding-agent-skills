@@ -35,6 +35,12 @@ Use the `AskQuestion` tool to confirm:
 
 > "I've detected that this task requires full agent permissions to modify files and execute commands. OK to proceed with `cursor-agent`?"
 
+**Built-in security posture (no flags required):**
+
+- **Sandbox on by default:** OS-level sandboxing is enabled automatically on macOS, Linux, and Windows since early 2026. No `--sandbox` flag is needed.
+- **Network restricted by default:** Outbound access is limited to GitHub, select web-search providers, and explicitly user-approved links. All other outbound requests are blocked.
+- **MCP approval required:** Every third-party MCP connection triggers an explicit user-approval prompt. Always inspect available tools with `cursor-agent mcp list-tools <id>` before approving any MCP server.
+
 ### 3. Execution
 
 Execute `cursor-agent` using the determined mode. Use `--print` for non-interactive output suitable for the calling agent.
@@ -52,10 +58,31 @@ cursor-agent --print "<prompt>"
 
 ### 4. Advanced Commands
 
+#### Session Management
+
+- `cursor-agent ls`: List previous conversations.
+- `cursor-agent --resume [thread-id]`: Resume a prior conversation by ID. Omit the ID to resume the most recent session.
+
+#### Cloud Handoff
+
+Prefix any interactive message with `&` to push the current conversation to a background Cloud Agent:
+
+```text
+& <follow-up prompt>
+```
+
+The agent continues running asynchronously. Pick up the conversation at `cursor.com/agents` on the web or mobile app.
+
+#### Context Management
+
+- `@<file-or-folder>`: Select specific files or folders to include in the agent's context.
+- `/compress`: Free up context window space by summarizing prior turns.
+
 #### MCP Management
 
 - `cursor-agent mcp list`: View configured MCP servers.
 - `cursor-agent mcp list-tools <id>`: Inspect tools available in a specific MCP.
+- `/mcp list` (interactive mode): Open an interactive menu to browse, enable, and configure MCP servers.
 
 #### Rule Generation
 
@@ -64,6 +91,29 @@ cursor-agent --print "<prompt>"
 ## Configuration
 
 This skill uses native `cursor-agent` flags. Ensure `CURSOR_API_KEY` is set in the environment if required, or run `cursor-agent login` first.
+
+### Model Selection
+
+Cursor supports models from multiple providers. The active model depends on your subscription tier (defaults to Cursor's proprietary **Composer 2 Fast** or GPT-5.3-Codex on most paid plans). Switch models at any time via the in-session model picker, or set `CURSOR_MODEL` in the environment:
+
+```bash
+CURSOR_MODEL=claude-sonnet-4-6 cursor-agent --print "<prompt>"
+```
+
+Available providers: OpenAI (GPT-5.x), Anthropic (Claude Opus/Sonnet/Haiku 4.x), Google (Gemini 2.5/3), Cursor (Composer 2 Fast), DeepSeek, and local models.
+
+## Automations *(Cloud — GA Mar 2026)*
+
+**Cursor Automations** are always-on cloud agents triggered by external events. They run in an isolated cloud sandbox with your configured MCPs, automatically verify their output, and post results (e.g., comments, PRs).
+
+**Supported triggers:** GitHub PR opened/updated, Slack message, Linear issue created, PagerDuty alert, cron schedule, webhook.
+
+Configure automations at `cursor.com/settings/automations`.
+
+**Example automation uses:**
+- Auto-review every PR for security issues and post a summary comment
+- Triage Linear issues and assign labels based on content
+- On PagerDuty alert: investigate recent commits, identify likely culprit, open a fix PR
 
 ## Examples
 

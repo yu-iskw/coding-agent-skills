@@ -1,6 +1,6 @@
 # Gemini CLI Research
 
-Executive summary (as of February 2, 2026)
+Executive summary (as of March 2026)
 • Gemini CLI is a powerful interactive coding agent that can read, edit, and run code in your repository, featuring both a conversational TUI and a non-interactive automation mode.
 • The core power of Gemini CLI stems from its extensibility and governance model: 1. **Non-interactive automation**: Use `-p/--prompt` for one-shot tasks and CI/CD integration. 2. **Extensions**: Package prompts, MCP servers, custom commands, hooks, sub-agents, and agent skills into shareable units. 3. **MCP (Model Context Protocol)**: Integrate external data sources and tools (databases, APIs, documentation) safely. 4. **Agent Skills**: Reusable, specialized workflows that are activated on-demand (e.g., security audits, PR reviews). 5. **Lifecycle Hooks**: Intercept and customize agent behavior at key events (BeforeTool, AfterTool, SessionStart).
 • Below you’ll find advanced use cases and a configuration playbook focused on security, team collaboration, and automation.
@@ -101,10 +101,14 @@ Gemini CLI offers four distinct modes to balance speed and safety:
 Mode Behavior Best for
 default Prompts for every tool (edit, shell, etc.) General development
 auto_edit Auto-approves file edits; prompts for shell Bulk refactoring / drafting
-yolo Auto-approves ALL tools Trusted scripts / sandboxed envs
-plan Read-only; no tools that modify state Audits, reviews, analysis
+yolo Auto-approves ALL tools (CLI flag only) Trusted scripts / sandboxed envs
+plan Read-only; no tools that modify state *(experimental)* Audits, reviews, analysis
 
 Best practice: Use `default` for daily work and `plan` for CI/CD or sensitive analysis.
+
+> **Security note:** `yolo` mode can only be enabled via CLI flag (`--yolo` or `--approval-mode yolo`). It cannot be persisted in `settings.json`, preventing accidental system-wide auto-approval.
+> **Shorthand:** `--yolo` flag is equivalent to `--approval-mode yolo` and is the recommended CLI shorthand.
+> **Plan mode note:** `plan` is currently experimental and requires planning to be enabled in your configuration.
 
 ⸻
 
@@ -173,6 +177,52 @@ A concrete “best-practice” settings.json starter (adapt as needed)
   }
 }
 ```
+
+⸻
+
+E. Remote Subagents via A2A Protocol *(experimental — v0.33.0, March 2026)*
+
+Gemini CLI can delegate subtasks to remote agents via the **Agent-to-Agent (A2A) protocol** (JSON-RPC 2.0 over HTTPS, version 0.3). This enables multi-agent orchestration without leaving the Gemini CLI session.
+
+Three-agent model:
+1. **User agent**: Triggers the top-level task
+2. **Client agent**: Solicits and delivers tasks on behalf of the user
+3. **Remote agent**: Executes the delegated task and relays results
+
+Key properties:
+• Every agent publishes `/.well-known/agent.json` (endpoint, skills, auth method)
+• Short-lived tokens: scoped per task, expiring in minutes
+• HTTP auth for remote agents added in v0.33.0
+• Version 0.3 adds gRPC support and security card signing
+• Interoperable with any A2A-compatible agent (specification at https://a2a-protocol.org/)
+
+Usage:
+
+```bash
+# Enable experimental A2A / agent coordination protocol
+gemini -p "<task>" --experimental-acp
+
+# View active subagents in interactive mode
+/subagents
+```
+
+Best practice: Only enable `--experimental-acp` in environments where you control or trust the remote agent endpoints. Use `tools.exclude` in settings to restrict what remote agents can access.
+
+⸻
+
+F. New Configuration Options (March 2026)
+
+Several new settings are available in recent Gemini CLI releases:
+
+- **`general.sessionRetention`**: Auto-cleanup sessions by max age (e.g., `"30d"`) and count limits.
+- **`general.plan.modelRouting`**: Automatically switch between Pro and Flash models based on planning vs. implementation phase.
+- **`agents.browser.confirmSensitiveActions`**: Require manual confirmation for sensitive browser actions (form fills, script execution).
+- **`agents.browser.blockFileUploads`**: Hard-block file upload requests via browser agent.
+- **`security.enablePermanentToolApproval`**: Enables "Allow for all future sessions" option in tool approval dialogs.
+- **`experimental.memoryManager`**: Enables an improved memory subagent with deduplication and organization (replaces `save_memory`).
+- **`tools.core`**: Restrict built-in tools via allowlist (only matching tools available).
+- **`tools.allowed`**: Tool names that bypass the confirmation dialog.
+- **`tools.exclude`**: Tool names to disable entirely.
 
 ⸻
 
