@@ -11,7 +11,7 @@
         "source": "github",
         "repo": "yu-iskw/coding-agent-skills"
       },
-      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "gemini", "cursor"],
+      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "gemini", "cursor", "copilot"],
       "skills": [
         {
           "name": "orchestrating-parallel-tasks",
@@ -32,6 +32,10 @@
         {
           "name": "cursor-agent-cli",
           "description": "Executes tasks using the Cursor Agent CLI. Provides structured modes for planning, Q&A, and full automation with safety guardrails."
+        },
+        {
+          "name": "copilot-cli",
+          "description": "Executes tasks using the GitHub Copilot CLI. Automatically determines the safest permission mode based on the task type."
         }
       ]
     }
