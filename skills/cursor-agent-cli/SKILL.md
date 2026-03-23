@@ -52,10 +52,31 @@ cursor-agent --print "<prompt>"
 
 ### 4. Advanced Commands
 
+#### Session Management
+
+- `cursor-agent ls`: List previous conversations.
+- `cursor-agent --resume [thread-id]`: Resume a prior conversation by ID. Omit the ID to resume the most recent session.
+
+#### Cloud Handoff
+
+Prefix any interactive message with `&` to push the current conversation to a background Cloud Agent:
+
+```text
+& <follow-up prompt>
+```
+
+The agent continues running asynchronously. Pick up the conversation at `cursor.com/agents` on the web or mobile app.
+
+#### Context Management
+
+- `@<file-or-folder>`: Select specific files or folders to include in the agent's context.
+- `/compress`: Free up context window space by summarizing prior turns.
+
 #### MCP Management
 
 - `cursor-agent mcp list`: View configured MCP servers.
 - `cursor-agent mcp list-tools <id>`: Inspect tools available in a specific MCP.
+- `/mcp list` (interactive mode): Open an interactive menu to browse, enable, and configure MCP servers.
 
 #### Rule Generation
 

@@ -2,7 +2,7 @@
 
 This reference provides concrete examples of how to apply the permission tiers when using the `codex` CLI through this skill.
 
-## Tier 0: Analysis & Research (Mode: `readonly`)
+## Tier 0: Analysis & Research (Mode: `suggest`)
 
 **Intent**: "Summarize the architecture of this project."
 **Logic**: No changes or commands needed.
@@ -17,10 +17,10 @@ codex -q "Summarize the project architecture in README.md and the directory stru
 **Command**:
 
 ```bash
-codex -q "What is the current version and main features of MCP as of February 2026?"
+codex -q "What is the current version and main features of MCP as of early 2026?"
 ```
 
-## Tier 1: Workspace Modification (Mode: `editor`)
+## Tier 1: Workspace Modification (Mode: `auto-edit`)
 
 **Intent**: "Fix all typos in the documentation files."
 **Logic**: Modifies files automatically but does not run external tools.
@@ -31,7 +31,7 @@ codex -q "What is the current version and main features of MCP as of February 20
 codex --auto-edit "Find and fix spelling and grammar errors in all .md files in the docs/ directory."
 ```
 
-## Tier 2: Sandbox Execution (Mode: `autonomous`)
+## Tier 2: Sandbox Execution (Mode: `full-auto`)
 
 **Intent**: "Update dependencies and ensure the build still passes."
 **Logic**: Modifies files AND executes build commands in sandbox.

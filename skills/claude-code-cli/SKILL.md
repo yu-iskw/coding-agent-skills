@@ -15,7 +15,8 @@ Use this skill to perform coding, research, or automation tasks using the `claud
 | :---- | :------------------ | :------------------------------------------- | :------------------ | :---------------------------------------- |
 | **0** | `plan`              | Read-only access, analysis, research.        | **No**              | Code review, audits, web research.        |
 | **1** | `acceptEdits`       | Auto-approves file edits; prompts for shell. | **Yes**             | Refactoring, documentation, lint fixes.   |
-| **2** | `bypassPermissions` | Auto-approves ALL tools (edits + shell).     | **Yes (High Risk)** | CI/CD, complex builds, automated testing. |
+| **2** | `bypassPermissions` | Auto-approves ALL tools (edits + shell); respects deny list. | **Yes (High Risk)** | CI/CD, complex builds, automated testing. |
+| **–** | `delegate`          | Subagents inherit parent's permission level. | **Varies**          | Multi-agent / parallel task workflows.    |
 
 ## Implementation Workflow
 
@@ -62,6 +63,7 @@ claude -p "<prompt>" --permission-mode bypassPermissions
 - **NEVER** use `--permission-mode bypassPermissions` without explicit confirmation of the risks.
 - **ALWAYS** use the most restrictive mode possible (prefer `plan`).
 - If you are unsure, default to `plan` and escalate only if `claude` reports it cannot complete the task.
+- **`--permission-mode bypassPermissions` vs `--dangerously-skip-permissions`**: `bypassPermissions` still respects explicit deny rules in `settings.json`. The `--dangerously-skip-permissions` flag bypasses ALL checks including the deny list — never use it outside a fully isolated container.
 
 ## Configuration
 

@@ -13,7 +13,7 @@ Use this skill to perform coding, research, or automation tasks using the `gemin
 
 | Tier  | Gemini Mode | Capability                                   | Approval Required   | Typical Tasks                             |
 | :---- | :---------- | :------------------------------------------- | :------------------ | :---------------------------------------- |
-| **0** | `plan`      | Read-only access, analysis, research.        | **No**              | Code review, audits, web research.        |
+| **0** | `plan`      | Read-only access, analysis, research. *(experimental)* | **No** | Code review, audits, web research.        |
 | **1** | `auto_edit` | Auto-approves file edits; prompts for shell. | **Yes**             | Refactoring, documentation, lint fixes.   |
 | **2** | `yolo`      | Auto-approves ALL tools (edits + shell).     | **Yes (High Risk)** | CI/CD, complex builds, automated testing. |
 
@@ -49,21 +49,23 @@ Use the `AskQuestion` tool to confirm:
 Execute `gemini` using the mode determined by the tier. If resuming a session, you can check `/stats` within the interactive prompt for token usage.
 
 ```bash
-# Tier 0 (Plan)
+# Tier 0 (Plan — experimental read-only mode)
 gemini -p "<prompt>" --approval-mode plan --sandbox
 
 # Tier 1 (Auto-Edit)
 gemini -p "<prompt>" --approval-mode auto_edit
 
-# Tier 2 (YOLO)
-gemini -p "<prompt>" --approval-mode yolo
+# Tier 2 (YOLO — shorthand flag also available)
+gemini -p "<prompt>" --yolo
+# equivalent: gemini -p "<prompt>" --approval-mode yolo
 ```
 
 **Security Rules:**
 
-- **NEVER** use `--approval-mode yolo` without explicit confirmation of the risks.
+- **NEVER** use `--yolo` / `--approval-mode yolo` without explicit confirmation of the risks.
 - **ALWAYS** use the most restrictive mode possible (prefer `plan`).
 - If you are unsure, default to `plan` and escalate only if `gemini` reports it cannot complete the task.
+- **`yolo` mode can only be enabled via CLI flag.** It cannot be persisted in `settings.json` to prevent accidental system-wide auto-approval.
 
 ## Configuration
 
