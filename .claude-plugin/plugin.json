@@ -1,0 +1,13 @@
+{
+  "name": "coding-agent-skills",
+  "version": "0.1.0",
+  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Gemini, and Cursor agent CLIs.",
+  "author": {
+    "name": "yu-iskw",
+    "url": "https://github.com/yu-iskw"
+  },
+  "homepage": "https://github.com/yu-iskw/coding-agent-skills",
+  "repository": "https://github.com/yu-iskw/coding-agent-skills",
+  "keywords": ["coding-agent", "skills", "orchestration", "claude-code", "codex", "gemini", "cursor"],
+  "skills": "skills"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "coding-agent-skills",
+  "description": "A marketplace of reusable coding agent skills for orchestrating parallel tasks and delegating work to multiple AI CLI tools.",
+  "homepage": "https://github.com/yu-iskw/coding-agent-skills",
+  "plugins": [
+    {
+      "name": "coding-agent-skills",
+      "version": "0.1.0",
+      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Gemini, and Cursor agent CLIs.",
+      "source": {
+        "source": "github",
+        "repo": "yu-iskw/coding-agent-skills"
+      },
+      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "gemini", "cursor"],
+      "skills": [
+        {
+          "name": "orchestrating-parallel-tasks",
+          "description": "Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents."
+        },
+        {
+          "name": "claude-code-cli",
+          "description": "Executes tasks using the Claude Code CLI. Automatically determines the safest permission mode based on the task type."
+        },
+        {
+          "name": "codex-cli",
+          "description": "Executes tasks using the Codex CLI. Automatically determines the least privilege required based on the user's request."
+        },
+        {
+          "name": "gemini-cli",
+          "description": "Executes tasks using the Gemini CLI. Automatically determines the safest approval mode based on the task type."
+        },
+        {
+          "name": "cursor-agent-cli",
+          "description": "Executes tasks using the Cursor Agent CLI. Provides structured modes for planning, Q&A, and full automation with safety guardrails."
+        }
+      ]
+    }
+  ]
+}
