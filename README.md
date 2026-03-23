@@ -18,7 +18,7 @@ Standard agents operate in a single-session vacuum. Coding Agent Skills provide:
 2.  **Deterministic SOPs**: Standardize complex workflows (e.g., security audits, library upgrades) as executable SOPs that ensure zero steps are skipped.
 3.  **Context Hygiene**: Use progressive disclosure to feed agents only the data they need, maintaining high reasoning quality.
 4.  **Autonomous Fixer Loops**: Encapsulate `Test -> Analyze -> Fix` loops so agents self-correct without human intervention.
-5.  **Platform Portability**: Write skills once; run them across **Cursor**, **Claude Code**, **Gemini CLI**, and **Codex**.
+5.  **Platform Portability**: Write skills once; run them across **Cursor**, **Claude Code**, **Gemini CLI**, **Codex**, and **GitHub Copilot CLI**.
 6.  **Safety Governance**: Define granular permission modes per skill to manage risk in autonomous executions.
 7.  **Institutional Memory**: Codify "Tribal Knowledge" into skills so every agent (and human) operates at an expert level.
 8.  **Sub-Agent Specialization**: Spin up micro-personas (e.g., "SQL Optimizer") for domain-specific precision.
@@ -39,6 +39,7 @@ This repository includes the following coding agent skills:
 - **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, or bypassPermissions) based on the task type.
 - **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Read-Only, Editor, or Autonomous) based on the user's request and handles security approvals.
 - **[gemini-cli](skills/gemini-cli/)**: Executes tasks using the Gemini CLI (`gemini`). Automatically determines the safest approval mode (plan, auto_edit, or yolo) based on the task type.
+- **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
 <!-- END-SKILLS -->
 
 ## Claude Code Plugin
@@ -92,4 +93,5 @@ Once installed, skills are available under the `coding-agent-skills` namespace:
 /coding-agent-skills:codex-cli
 /coding-agent-skills:gemini-cli
 /coding-agent-skills:cursor-agent-cli
+/coding-agent-skills:copilot-cli
 ```

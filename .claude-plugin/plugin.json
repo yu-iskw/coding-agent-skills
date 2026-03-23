@@ -8,6 +8,6 @@
   },
   "homepage": "https://github.com/yu-iskw/coding-agent-skills",
   "repository": "https://github.com/yu-iskw/coding-agent-skills",
-  "keywords": ["coding-agent", "skills", "orchestration", "claude-code", "codex", "gemini", "cursor"],
+  "keywords": ["coding-agent", "skills", "orchestration", "claude-code", "codex", "gemini", "cursor", "copilot"],
   "skills": "skills"
 }
