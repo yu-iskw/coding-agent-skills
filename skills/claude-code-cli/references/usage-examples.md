@@ -34,6 +34,30 @@ claude -p "Find and fix spelling and grammar errors in all .md files in the docs
   --permission-mode acceptEdits --sandbox
 ```
 
+## Tier 1.5: Long-running Autonomous Execution (Mode: `auto`)
+
+> **Requirements**: Team / Enterprise / API plan; Claude Sonnet 4.6 or Opus 4.6. Not available on Haiku or claude-3 models.
+
+**Intent**: "Run the full test suite and fix all failures — don't interrupt me."
+**Logic**: Long-running task where manual approval prompts would be disruptive. The background classifier automatically blocks risky operations (e.g., force-push to `main`, mass deletion) while allowing safe ones (local edits, installing from lock file, pushing to current branch).
+**Approval Required**: No (classifier handles it).
+**Command**:
+
+```bash
+claude -p "Run the full test suite, analyze every failure, and fix the underlying code. Do not stop until all tests pass." \
+  --permission-mode auto
+```
+
+**Intent**: "Refactor the authentication module and run all related tests to confirm nothing broke."
+**Logic**: Involves both file edits and shell execution across many steps; auto mode eliminates repeated prompts while the classifier guards against out-of-scope actions.
+**Approval Required**: No (classifier handles it).
+**Command**:
+
+```bash
+claude -p "Refactor src/auth/ to use the new token format, update all call sites, then run 'make test' and fix any failures." \
+  --permission-mode auto
+```
+
 ## Tier 2: Autonomous Execution (Mode: `bypassPermissions`)
 
 **Intent**: "Update dependencies and ensure the build still passes."
