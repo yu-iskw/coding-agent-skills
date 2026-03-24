@@ -1,6 +1,6 @@
 ---
 name: claude-code-cli
-description: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, or bypassPermissions) based on the task type.
+description: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, auto, or bypassPermissions) based on the task type.
 ---
 
 # executing-claude
@@ -11,12 +11,13 @@ Use this skill to perform coding, research, or automation tasks using the `claud
 
 ## Permission Tiers
 
-| Tier  | Claude Mode         | Capability                                   | Approval Required   | Typical Tasks                             |
-| :---- | :------------------ | :------------------------------------------- | :------------------ | :---------------------------------------- |
-| **0** | `plan`              | Read-only access, analysis, research.        | **No**              | Code review, audits, web research.        |
-| **1** | `acceptEdits`       | Auto-approves file edits; prompts for shell. | **Yes**             | Refactoring, documentation, lint fixes.   |
-| **2** | `bypassPermissions` | Auto-approves ALL tools (edits + shell); respects deny list. | **Yes (High Risk)** | CI/CD, complex builds, automated testing. |
-| **–** | `delegate`          | Subagents inherit parent's permission level. | **Varies**          | Multi-agent / parallel task workflows.    |
+| Tier    | Claude Mode         | Capability                                                    | Approval Required                  | Plan Requirement                           | Typical Tasks                             |
+| :------ | :------------------ | :------------------------------------------------------------ | :--------------------------------- | :----------------------------------------- | :---------------------------------------- |
+| **0**   | `plan`              | Read-only access, analysis, research.                         | **No**                             | Any                                        | Code review, audits, web research.        |
+| **1**   | `acceptEdits`       | Auto-approves file edits; prompts for shell.                  | **Yes**                            | Any                                        | Refactoring, documentation, lint fixes.   |
+| **1.5** | `auto`              | All actions; background classifier blocks risky operations.   | **No (classifier handles it)**     | Team / Enterprise / API; Sonnet 4.6+ only  | Long-running tasks, reducing prompt fatigue. |
+| **2**   | `bypassPermissions` | Auto-approves ALL tools (edits + shell); respects deny list.  | **Yes (High Risk)**                | Any                                        | CI/CD, complex builds, automated testing. |
+| **–**   | `delegate`          | Subagents inherit parent's permission level.                  | **Varies**                         | Any                                        | Multi-agent / parallel task workflows.    |
 
 ## Implementation Workflow
 
@@ -33,7 +34,8 @@ Analyze the user's intent to determine the required permission tier.
 
 - **Tier 0 (Plan)**: Does the task only involve reading code or searching for information?
 - **Tier 1 (Accept Edits)**: Does the task involve modifying files but no command execution?
-- **Tier 2 (Bypass Permissions)**: Does the task require running tests, build scripts, or managing dependencies autonomously?
+- **Tier 1.5 (Auto)**: Is the task long-running and would interactive prompting be disruptive? Does the user have a Team/Enterprise plan and use Sonnet 4.6 or Opus 4.6? If yes, prefer `auto` over `bypassPermissions` — the classifier will block risky operations automatically.
+- **Tier 2 (Bypass Permissions)**: Does the task require running tests, build scripts, or managing dependencies autonomously, and `auto` mode is unavailable or insufficient?
 
 ### 2. Approval Protocol
 
@@ -55,6 +57,10 @@ claude -p "<prompt>" --permission-mode plan --sandbox \
 # Tier 1 (Accept Edits + sandbox — file writes allowed, shell gated, OS-level isolation)
 claude -p "<prompt>" --permission-mode acceptEdits --sandbox
 
+# Tier 1.5 (Auto — all actions; background classifier blocks risky operations)
+# Requires Team/Enterprise/API plan and Sonnet 4.6 or Opus 4.6
+claude -p "<prompt>" --permission-mode auto
+
 # Tier 2 (Bypass Permissions — sandbox omitted; must run shell commands freely)
 claude -p "<prompt>" --permission-mode bypassPermissions
 ```
@@ -66,7 +72,27 @@ claude -p "<prompt>" --permission-mode bypassPermissions
 - **NEVER** use `--permission-mode bypassPermissions` without explicit confirmation of the risks.
 - **ALWAYS** use the most restrictive mode possible (prefer `plan`).
 - If you are unsure, default to `plan` and escalate only if `claude` reports it cannot complete the task.
+- **Prefer `auto` over `bypassPermissions`** when eligibility conditions are met — the classifier provides safety guardrails without requiring manual approval for every action.
+- **`auto` mode classifier behavior**: The classifier runs on Sonnet 4.6 regardless of the main session model, and its calls count toward token usage. Extra cost is incurred mainly by shell commands and network operations; read-only actions and local file edits do not trigger classifier calls. If the classifier blocks an action, `claude` pauses and asks the user before proceeding.
+- **`auto` mode is not available on Haiku or claude-3 models.** If using these models, fall back to Tier 1 (`acceptEdits`) or Tier 2 (`bypassPermissions`) as appropriate.
 - **`--permission-mode bypassPermissions` vs `--dangerously-skip-permissions`**: `bypassPermissions` still respects explicit deny rules in `settings.json`. The `--dangerously-skip-permissions` flag bypasses ALL checks including the deny list — never use it outside a fully isolated container.
+
+**What the `auto` classifier blocks by default:**
+- Downloading and executing code (`curl | bash`, scripts from cloned repos)
+- Sending sensitive data to external endpoints
+- Production deploys and migrations
+- Mass deletion on cloud storage
+- Granting IAM or repo permissions
+- Modifying shared infrastructure
+- Destructively destroying files that existed before the session started
+- Force-pushing or pushing directly to `main`
+
+**What the `auto` classifier allows by default:**
+- Local file operations in the working directory
+- Installing dependencies from lock files
+- Reading `.env` and sending credentials to matching APIs
+- Read-only HTTP requests
+- Pushing to the branch you started on or one `claude` created
 
 ## Configuration
 
