@@ -42,6 +42,39 @@ This repository includes the following coding agent skills:
 - **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
 <!-- END-SKILLS -->
 
+## Codex Plugin
+
+This repository is published as a Codex plugin. Install it to use the skills
+directly from within any Codex session.
+
+### Option 1: Via Custom Marketplace (Recommended)
+
+Add this repository as a custom marketplace, then install the plugin:
+
+```
+codex marketplace add https://github.com/yu-iskw/coding-agent-skills
+codex plugins install coding-agent-skills
+```
+
+### Option 2: Project Settings
+
+To enable the plugin for all members of a project, add the custom marketplace
+to `.agents/plugins/marketplace.json` in your repository:
+
+```json
+{
+  "name": "Coding Agent Skills Marketplace",
+  "entries": [
+    {
+      "name": "coding-agent-skills",
+      "source": "https://github.com/yu-iskw/coding-agent-skills",
+      "policy": "AVAILABLE",
+      "category": "productivity"
+    }
+  ]
+}
+```
+
 ## Claude Code Plugin
 
 This repository is published as a Claude Code plugin. Install it to use the skills
