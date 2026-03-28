@@ -1,0 +1,32 @@
+{
+  "name": "coding-agent-skills",
+  "version": "0.1.0",
+  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Gemini, and Cursor agent CLIs.",
+  "author": {
+    "name": "yu-iskw",
+    "url": "https://github.com/yu-iskw"
+  },
+  "homepage": "https://github.com/yu-iskw/coding-agent-skills",
+  "repository": "https://github.com/yu-iskw/coding-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "coding-agent",
+    "skills",
+    "orchestration",
+    "claude-code",
+    "codex",
+    "gemini",
+    "cursor",
+    "copilot"
+  ],
+  "skills": "./skills/",
+  "displayName": "Coding Agent Skills",
+  "shortDescription": "Reusable skills for orchestrating parallel AI agent workflows.",
+  "longDescription": "Coding Agent Skills transforms your repository into an Agent-Ready Environment by providing deterministic, reusable skills that enable higher autonomy, precision, and parallelism. Includes skills for orchestrating parallel tasks and executing work via Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, and Cursor Agent CLI.",
+  "developerName": "yu-iskw",
+  "category": "productivity",
+  "websiteURL": "https://github.com/yu-iskw/coding-agent-skills",
+  "defaultPrompt": "Use the orchestrating-parallel-tasks skill to break this task into parallel sub-tasks.",
+  "brandColor": "#6366f1",
+  "logo": ""
+}
