@@ -1,0 +1,11 @@
+{
+  "name": "Coding Agent Skills Marketplace",
+  "entries": [
+    {
+      "name": "coding-agent-skills",
+      "source": "https://github.com/yu-iskw/coding-agent-skills",
+      "policy": "AVAILABLE",
+      "category": "productivity"
+    }
+  ]
+}
