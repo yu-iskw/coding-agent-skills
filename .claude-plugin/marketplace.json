@@ -6,12 +6,12 @@
     {
       "name": "coding-agent-skills",
       "version": "0.1.0",
-      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Gemini, and Cursor agent CLIs.",
+      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, and Antigravity CLIs.",
       "source": {
         "source": "github",
         "repo": "yu-iskw/coding-agent-skills"
       },
-      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "gemini", "cursor", "copilot"],
+      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "cursor", "copilot", "pi", "antigravity"],
       "skills": [
         {
           "name": "orchestrating-parallel-tasks",
@@ -26,16 +26,20 @@
           "description": "Executes tasks using the Codex CLI. Automatically determines the least privilege required based on the user's request."
         },
         {
-          "name": "gemini-cli",
-          "description": "Executes tasks using the Gemini CLI. Automatically determines the safest approval mode based on the task type."
-        },
-        {
           "name": "cursor-agent-cli",
           "description": "Executes tasks using the Cursor Agent CLI. Provides structured modes for planning, Q&A, and full automation with safety guardrails."
         },
         {
           "name": "copilot-cli",
           "description": "Executes tasks using the GitHub Copilot CLI. Automatically determines the safest permission mode based on the task type."
+        },
+        {
+          "name": "pi-agent-cli",
+          "description": "Executes tasks using the Pi coding agent CLI with explicit tool allowlists and least-privilege capability tiers."
+        },
+        {
+          "name": "antigravity-cli",
+          "description": "Executes tasks using Google Antigravity CLI with native fine-grained allow, ask, and deny permission resources."
         }
       ]
     }
