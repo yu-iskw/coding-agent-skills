@@ -1,7 +1,7 @@
 {
   "name": "coding-agent-skills",
   "version": "0.1.0",
-  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Gemini, and Cursor agent CLIs.",
+  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, and Antigravity CLIs.",
   "author": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
@@ -15,14 +15,15 @@
     "orchestration",
     "claude-code",
     "codex",
-    "gemini",
     "cursor",
-    "copilot"
+    "copilot",
+    "pi",
+    "antigravity"
   ],
   "skills": "./skills/",
   "displayName": "Coding Agent Skills",
   "shortDescription": "Reusable skills for orchestrating parallel AI agent workflows.",
-  "longDescription": "Coding Agent Skills transforms your repository into an Agent-Ready Environment by providing deterministic, reusable skills that enable higher autonomy, precision, and parallelism. Includes skills for orchestrating parallel tasks and executing work via Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, and Cursor Agent CLI.",
+  "longDescription": "Coding Agent Skills transforms your repository into an Agent-Ready Environment by providing deterministic, reusable skills that enable higher autonomy, precision, and parallelism. Includes skills for orchestrating parallel tasks and executing work via Claude Code, Codex CLI, Cursor Agent CLI, GitHub Copilot CLI, Pi, and Google Antigravity CLI.",
   "developerName": "yu-iskw",
   "category": "productivity",
   "websiteURL": "https://github.com/yu-iskw/coding-agent-skills",
