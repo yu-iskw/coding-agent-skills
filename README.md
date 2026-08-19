@@ -18,7 +18,7 @@ Standard agents operate in a single-session vacuum. Coding Agent Skills provide:
 2.  **Deterministic SOPs**: Standardize complex workflows (e.g., security audits, library upgrades) as executable SOPs that ensure zero steps are skipped.
 3.  **Context Hygiene**: Use progressive disclosure to feed agents only the data they need, maintaining high reasoning quality.
 4.  **Autonomous Fixer Loops**: Encapsulate `Test -> Analyze -> Fix` loops so agents self-correct without human intervention.
-5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, and **Google Antigravity CLI**.
+5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, **fx**, and **Google Antigravity CLI**.
 6.  **Safety Governance**: Define granular permission modes per skill to manage risk in autonomous executions.
 7.  **Institutional Memory**: Codify "Tribal Knowledge" into skills so every agent (and human) operates at an expert level.
 8.  **Sub-Agent Specialization**: Spin up micro-personas (e.g., "SQL Optimizer") for domain-specific precision.
@@ -41,6 +41,7 @@ This repository includes the following coding agent skills:
 - **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.
 - **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
 - **[pi-agent-cli](skills/pi-agent-cli/)**: Executes tasks using the Pi coding agent CLI (`pi`) with explicit tool allowlists and least-privilege capability tiers. Pi also natively implements the Agent Skills standard.
+- **[fx-agent-cli](skills/fx-agent-cli/)**: Executes tasks using the Vercel Labs fx coding-agent CLI (`fx`) with native permission review, Agent Skills support, and narrowly scoped `fx ask` invocations.
 - **[antigravity-cli](skills/antigravity-cli/)**: Executes tasks using Google Antigravity CLI (`agy`) with native fine-grained `allow` / `ask` / `deny` permission resources.
 <!-- END-SKILLS -->
 
@@ -64,13 +65,31 @@ Execute -> Validate -> Report
 Escalate only if required
 ```
 
-For example, Pi uses explicit `--tools` allowlists while Antigravity uses fine-grained permission resources. This repository does not force heterogeneous agents into a lowest-common-denominator CLI abstraction.
+For example, Pi uses explicit `--tools` allowlists, fx uses native permission review and persistent permission rules, while Antigravity uses fine-grained permission resources. This repository does not force heterogeneous agents into a lowest-common-denominator CLI abstraction.
 
 ## Pi Compatibility
 
 Pi implements the Agent Skills standard and discovers compatible `SKILL.md` packages from standard skill locations, including `.agents/skills/`. It can also load a specific skill explicitly with `--skill <path>`.
 
 The `pi-agent-cli` skill is complementary: it describes how another agent or workflow can invoke Pi as a delegated execution agent with a least-privilege tool set.
+
+## fx Compatibility
+
+fx natively discovers Agent Skills from workspace and compatibility roots including `skills/`, `.agents/skills/`, `.claude/skills/`, `.codex/skills/`, `.opencode/skills/`, and `.claw/skills/`.
+
+From an interactive fx session, install this collection directly from GitHub:
+
+```text
+/skills add https://github.com/yu-iskw/coding-agent-skills
+```
+
+Or install only the fx delegation skill:
+
+```text
+/skills add https://github.com/yu-iskw/coding-agent-skills --skill fx-agent-cli
+```
+
+The `fx-agent-cli` skill is complementary: it describes how another agent or workflow can invoke fx as a delegated execution agent through narrowly scoped `fx ask` requests while preserving fx's native permission model.
 
 ## Gemini CLI Retirement
 
@@ -163,5 +182,6 @@ Once installed, skills are available under the `coding-agent-skills` namespace:
 /coding-agent-skills:cursor-agent-cli
 /coding-agent-skills:copilot-cli
 /coding-agent-skills:pi-agent-cli
+/coding-agent-skills:fx-agent-cli
 /coding-agent-skills:antigravity-cli
 ```
