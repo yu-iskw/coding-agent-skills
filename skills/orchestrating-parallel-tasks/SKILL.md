@@ -1,6 +1,14 @@
 ---
 name: orchestrating-parallel-tasks
 description: Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents. Use when a task is described as an "epic", spans multiple architectural layers, or would benefit from concurrent development to reduce time-to-completion.
+license: Apache-2.0
+compatibility: Works in Agent Skills hosts with repository read access; actual delegation is performed by the host or a separate integration skill.
+metadata:
+  maturity: stable
+  risk: R0
+  category: orchestrate
+  network: "false"
+  side-effects: none
 ---
 
 # SOP: Orchestrating Parallel Tasks
