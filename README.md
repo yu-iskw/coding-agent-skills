@@ -1,187 +1,230 @@
-# Coding Agent Skills: The Orchestration Framework for Industrial-Grade AI Workflows
+# Coding Agent Skills — Verified Engineering Skills for Agent-Ready Repositories
 
-Standard coding agents are powerful but often hit a **"Complexity Ceiling"** in long-horizon tasks. As conversations grow, context decays, hallucinations increase, and reliability drops.
+**Coding Agent Skills** is a curated, cross-agent engineering skillpack built on portable `SKILL.md` packages.
 
-**Coding Agent Skills** transform your repository from a collection of code into an **Agent-Ready Environment**. By codifying workflows into deterministic, reusable skills, you enable agents to work with higher autonomy, precision, and parallelism.
+The project focuses on a problem that remains important even as coding agents become more capable: **how to make repeatable engineering workflows discoverable, reviewable, least-privileged, and backed by evidence instead of relying on one-off prompts.**
 
-## Why Coding Agent Skills?
+The canonical product is the skill library under `skills/`. Claude Code, Codex, Cursor, Copilot, Pi, fx, Antigravity, and future hosts are execution surfaces—not the architecture of the skills themselves.
 
-Standard agents operate in a single-session vacuum. Coding Agent Skills provide:
+## What makes this different
 
-- **Orchestration**: Decouple planning from execution for complex tasks.
-- **Reliability**: Replace vague prompts with structured, executable SOPs.
-- **Efficiency**: Parallelize work that would take a single agent hours to complete.
+A valid `SKILL.md` is only the starting point. This repository adds a quality contract around each canonical skill:
 
-## Key Advantages for Advanced Users
+- **Outcome-first skills** for repository discovery, planning, CI triage, risk assessment, review, security, maintenance, migration, and release work.
+- **Portable packaging** that keeps host-neutral engineering intent in standard Agent Skills packages.
+- **Risk metadata** using an R0–R4 capability taxonomy instead of pretending every agent has the same permission model.
+- **Routing fixtures** with positive and negative examples for every canonical skill.
+- **Behavior assertions** describing required and prohibited behavior that can be scored against host/model observations.
+- **Static security checks** for common malicious-skill and supply-chain patterns.
+- **Machine-readable discovery** through `catalog/catalog.json` and `llms.txt`.
+- **Composition recipes** that describe sequencing and gates without inventing another agent runtime.
+- **Optional integration adapters** for explicitly delegating work to other coding-agent CLIs.
 
-1.  **Multi-Agent Parallelism**: Break monolithic tasks into sub-tasks and execute them simultaneously across multiple agent instances.
-2.  **Deterministic SOPs**: Standardize complex workflows (e.g., security audits, library upgrades) as executable SOPs that ensure zero steps are skipped.
-3.  **Context Hygiene**: Use progressive disclosure to feed agents only the data they need, maintaining high reasoning quality.
-4.  **Autonomous Fixer Loops**: Encapsulate `Test -> Analyze -> Fix` loops so agents self-correct without human intervention.
-5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, **fx**, and **Google Antigravity CLI**.
-6.  **Safety Governance**: Define granular permission modes per skill to manage risk in autonomous executions.
-7.  **Institutional Memory**: Codify "Tribal Knowledge" into skills so every agent (and human) operates at an expert level.
-8.  **Sub-Agent Specialization**: Spin up micro-personas (e.g., "SQL Optimizer") for domain-specific precision.
-9.  **Headless CI/CD**: Trigger skills in pipelines for automated PR validation and structured reporting.
-10. **Low-Code Customization**: Add new capabilities by simply adding a `SKILL.md` file—no extension development required.
+## Choose by engineering outcome
 
-## Building an Agent-Ready Repository
+| Outcome | Skill | Normal capability |
+| --- | --- | --- |
+| Understand | [`repository-discovery`](skills/repository-discovery/) | R0 |
+| Plan | [`issue-to-implementation-plan`](skills/issue-to-implementation-plan/) | R0 |
+| Plan | [`migration-planning`](skills/migration-planning/) | R0 |
+| Validate | [`ci-failure-triage`](skills/ci-failure-triage/) | R2 |
+| Validate | [`test-gap-analysis`](skills/test-gap-analysis/) | R2 |
+| Review | [`change-risk-assessment`](skills/change-risk-assessment/) | R0 |
+| Review | [`pull-request-review`](skills/pull-request-review/) | R0 |
+| Secure | [`security-review`](skills/security-review/) | R2 |
+| Maintain | [`dependency-remediation`](skills/dependency-remediation/) | R2 |
+| Maintain | [`documentation-sync`](skills/documentation-sync/) | R1 |
+| Operate | [`release-readiness`](skills/release-readiness/) | R2 |
+| Orchestrate | [`orchestrating-parallel-tasks`](skills/orchestrating-parallel-tasks/) | R0 |
 
-An Agent-Ready repository isn't just about good code; it's about **explicit intent**. By providing `SKILL.md` files, you give AI agents a clear "map" of how to interact with your codebase, what tools to use, and how to validate their own work.
+Risk levels are host-neutral classifications, not authorization boundaries. See [`policies/risk-levels.md`](policies/risk-levels.md).
 
-## Available Skills
+### Integration and delegation adapters
 
-This repository includes the following coding agent skills:
+Use these only when the user or active host explicitly wants another coding agent to perform work:
 
-<!-- START-SKILLS -->
+- [`claude-code-cli`](skills/claude-code-cli/)
+- [`codex-cli`](skills/codex-cli/)
+- [`cursor-agent-cli`](skills/cursor-agent-cli/)
+- [`copilot-cli`](skills/copilot-cli/)
+- [`pi-agent-cli`](skills/pi-agent-cli/)
+- [`fx-agent-cli`](skills/fx-agent-cli/)
+- [`antigravity-cli`](skills/antigravity-cli/)
 
-- **[orchestrating-parallel-tasks](skills/orchestrating-parallel-tasks/)**: Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents. Use when a task is described as an "epic", spans multiple architectural layers, or would benefit from concurrent development to reduce time-to-completion.
-- **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, or bypassPermissions) based on the task type.
-- **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Read-Only, Editor, or Autonomous) based on the user's request and handles security approvals.
-- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.
-- **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
-- **[pi-agent-cli](skills/pi-agent-cli/)**: Executes tasks using the Pi coding agent CLI (`pi`) with explicit tool allowlists and least-privilege capability tiers. Pi also natively implements the Agent Skills standard.
-- **[fx-agent-cli](skills/fx-agent-cli/)**: Executes tasks using the Vercel Labs fx coding-agent CLI (`fx`) with native permission review, Agent Skills support, and narrowly scoped `fx ask` invocations.
-- **[antigravity-cli](skills/antigravity-cli/)**: Executes tasks using Google Antigravity CLI (`agy`) with native fine-grained `allow` / `ask` / `deny` permission resources.
-<!-- END-SKILLS -->
+These adapters preserve each agent's native security model instead of forcing heterogeneous agents into a lowest-common-denominator CLI abstraction. Their project-level capability contracts live in [`policies/skill-contracts.json`](policies/skill-contracts.json) because vendor CLI details change more quickly than canonical engineering procedures.
 
-## Security Convention for CLI Skills
+## Trust and evidence model
 
-Each execution skill follows the same conceptual lifecycle while preserving the native security model of its agent:
+The repository deliberately separates three kinds of evidence:
 
-```text
-Analyze requested actions
-        |
-        v
-Select minimum capability boundary
-        |
-        v
-Map to native agent controls
-        |
-        v
-Execute -> Validate -> Report
-        |
-        v
-Escalate only if required
+### 1. Conformance
+
+`skills-ref validate` checks Agent Skills package syntax and structure.
+
+### 2. Safety analysis
+
+Repository-local tooling checks declared R0–R4 capability metadata and statically scans skill assets for suspicious patterns such as remote code bootstrapping, decoded payload execution, credential access, destructive commands, approval bypasses, and external uploads.
+
+### 3. Behavioral evidence
+
+[`evals/manifest.json`](evals/manifest.json) contains positive/negative routing cases plus required/prohibited behavior assertions for every canonical skill. Observations from a particular agent host/model/version can be scored with:
+
+```bash
+python scripts/score_skill_observations.py path/to/observations.json
 ```
 
-For example, Pi uses explicit `--tools` allowlists, fx uses native permission review and persistent permission rules, while Antigravity uses fine-grained permission resources. This repository does not force heterogeneous agents into a lowest-common-denominator CLI abstraction.
+Behavioral results are **evidence for the evaluated environment, not certification**. Model, host, prompt, tool, and repository changes can change behavior. See [`evals/README.md`](evals/README.md).
 
-## Pi Compatibility
+## Quality gate
 
-Pi implements the Agent Skills standard and discovers compatible `SKILL.md` packages from standard skill locations, including `.agents/skills/`. It can also load a specific skill explicitly with `--skill <path>`.
+Run the complete deterministic quality gate with:
 
-The `pi-agent-cli` skill is complementary: it describes how another agent or workflow can invoke Pi as a delegated execution agent with a least-privilege tool set.
+```bash
+make check
+```
 
-## fx Compatibility
+It covers:
 
-fx natively discovers Agent Skills from workspace and compatibility roots including `skills/`, `.agents/skills/`, `.claude/skills/`, `.codex/skills/`, `.opencode/skills/`, and `.claw/skills/`.
+1. Agent Skills conformance.
+2. Repository quality-contract validation.
+3. Static security scanning.
+4. Generated catalog freshness.
 
-From an interactive fx session, install this collection directly from GitHub:
+Additional useful commands:
+
+```bash
+make catalog          # regenerate catalog/catalog.json, llms.txt, docs/compatibility.md
+make security-report  # write a machine-readable catalog/security-report.json
+make contracts        # validate risk + eval contracts
+make validate         # run skills-ref validation
+```
+
+Pull requests run the same checks in `.github/workflows/skill_quality.yml`.
+
+## Installation
+
+The canonical skills are plain Agent Skills packages, so prefer the host's native installation/discovery mechanism when available.
+
+### GitHub CLI Agent Skills
+
+Install the collection using the GitHub CLI Agent Skills command:
+
+```bash
+gh skill install yu-iskw/coding-agent-skills --all
+```
+
+Or install one skill:
+
+```bash
+gh skill install yu-iskw/coding-agent-skills repository-discovery
+```
+
+### Claude Code plugin
+
+Add this repository as a marketplace and install the plugin:
+
+```text
+/plugin marketplace add yu-iskw/coding-agent-skills
+/plugin install coding-agent-skills@coding-agent-skills
+```
+
+Direct installation is also supported by the existing Claude plugin package:
+
+```text
+/plugin install yu-iskw/coding-agent-skills
+```
+
+### Codex plugin
+
+```bash
+codex marketplace add https://github.com/yu-iskw/coding-agent-skills
+codex plugins install coding-agent-skills
+```
+
+### fx
+
+fx can install the Agent Skills collection directly:
 
 ```text
 /skills add https://github.com/yu-iskw/coding-agent-skills
 ```
 
-Or install only the fx delegation skill:
+Or install only the fx delegation adapter:
 
 ```text
 /skills add https://github.com/yu-iskw/coding-agent-skills --skill fx-agent-cli
 ```
 
-The `fx-agent-cli` skill is complementary: it describes how another agent or workflow can invoke fx as a delegated execution agent through narrowly scoped `fx ask` requests while preserving fx's native permission model.
+See [`docs/compatibility.md`](docs/compatibility.md) for the distinction between package/format compatibility and behavioral evidence.
 
-## Gemini CLI Retirement
+## Composition recipes
 
-Gemini CLI support has been removed. Google transitioned consumer Gemini CLI workflows to Antigravity CLI; use the `antigravity-cli` skill for Google coding-agent CLI execution.
+Recipes express useful sequencing and gates while leaving execution and delegation to the active agent host:
 
-The migration is intentionally not a command rename: Gemini CLI approval modes such as `plan`, `auto_edit`, and `yolo` do not map directly to Antigravity's fine-grained permission engine.
+- [`issue-to-pr`](recipes/issue-to-pr.md)
+- [`failing-ci-to-fix`](recipes/failing-ci-to-fix.md)
+- [`dependency-advisory-to-remediation`](recipes/dependency-advisory-to-remediation.md)
+- [`library-upgrade`](recipes/library-upgrade.md)
+- [`pr-risk-review`](recipes/pr-risk-review.md)
 
-## Codex Plugin
+For example:
 
-This repository is published as a Codex plugin. Install it to use the skills
-directly from within any Codex session.
-
-### Option 1: Via Custom Marketplace (Recommended)
-
-Add this repository as a custom marketplace, then install the plugin:
-
-```
-codex marketplace add https://github.com/yu-iskw/coding-agent-skills
-codex plugins install coding-agent-skills
-```
-
-### Option 2: Project Settings
-
-To enable the plugin for all members of a project, add the custom marketplace
-to `.agents/plugins/marketplace.json` in your repository:
-
-```json
-{
-  "name": "Coding Agent Skills Marketplace",
-  "entries": [
-    {
-      "name": "coding-agent-skills",
-      "source": "https://github.com/yu-iskw/coding-agent-skills",
-      "policy": "AVAILABLE",
-      "category": "productivity"
-    }
-  ]
-}
+```text
+repository-discovery
+        ↓
+issue-to-implementation-plan
+        ↓
+change-risk-assessment
+        ↓
+implementation by active host
+        ↓
+test-gap-analysis
+        ↓
+pull-request-review
 ```
 
-## Claude Code Plugin
+A recipe is intentionally **not** a custom scheduler or workflow language.
 
-This repository is published as a Claude Code plugin. Install it to use the skills
-directly from within any Claude Code session.
+## Machine-readable discovery
 
-### Option 1: Via Custom Marketplace (Recommended)
+Humans and agents do not need to parse every skill directory to discover capabilities:
 
-Add this repository as a custom marketplace, then install the plugin:
+- [`catalog/catalog.json`](catalog/catalog.json) — canonical generated catalog including risk/category metadata.
+- [`llms.txt`](llms.txt) — compact agent-readable skill index.
+- [`docs/compatibility.md`](docs/compatibility.md) — packaging and evidence model across supported surfaces.
+- [`evals/manifest.json`](evals/manifest.json) — routing and behavioral test fixtures.
 
-```
-/plugin marketplace add yu-iskw/coding-agent-skills
-/plugin install coding-agent-skills@coding-agent-skills
-```
+Generated discovery files are checked in CI to prevent drift from `SKILL.md` source metadata.
 
-### Option 2: Direct Install
+## Adding a skill
 
-Install the plugin directly from GitHub without adding the marketplace:
+New outcome skills should be small, reusable, and host-neutral. A new canonical skill must define:
 
-```
-/plugin install yu-iskw/coding-agent-skills
-```
-
-### Option 3: Project Settings
-
-To enable the plugin for all members of a project, add the following to
-`.claude/settings.json` in your repository:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "coding-agent-skills": {
-      "source": {
-        "source": "github",
-        "repo": "yu-iskw/coding-agent-skills"
-      }
-    }
-  },
-  "enabledPlugins": ["coding-agent-skills@coding-agent-skills"]
-}
+```yaml
+metadata:
+  maturity: beta
+  risk: R0
+  category: review
+  network: "false"
+  side-effects: none
 ```
 
-### Invoking Skills
+It must also add positive and negative routing fixtures plus required/prohibited behavior assertions to `evals/manifest.json` and pass `make check`.
 
-Once installed, skills are available under the `coding-agent-skills` namespace:
+Do not add a new vendor adapter merely because a new coding-agent CLI exists. Prefer a standard outcome skill unless explicit cross-agent delegation provides distinct user value.
 
-```
-/coding-agent-skills:orchestrating-parallel-tasks
-/coding-agent-skills:claude-code-cli
-/coding-agent-skills:codex-cli
-/coding-agent-skills:cursor-agent-cli
-/coding-agent-skills:copilot-cli
-/coding-agent-skills:pi-agent-cli
-/coding-agent-skills:fx-agent-cli
-/coding-agent-skills:antigravity-cli
-```
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the complete contribution contract and [`SECURITY.md`](SECURITY.md) for private vulnerability-reporting guidance.
+
+## Project design principles
+
+1. **Skills are the source of truth.** Plugin and host packaging must remain thin.
+2. **Engineering outcomes beat vendor wrappers.** A skill should solve a recurring task independent of the executing model when possible.
+3. **Least capability by default.** R0–R4 metadata makes expected side effects visible before execution.
+4. **Evidence over badges.** Conformance and static safety checks are deterministic; model behavior is measured, contextual evidence.
+5. **Composition without lock-in.** Recipes describe intent while native host runtimes handle orchestration.
+6. **Small curated catalog over prompt quantity.** New skills should earn their maintenance and routing cost.
+7. **No custom package manager or runtime dependency.** Installation, sandboxing, credentials, and scheduling remain responsibilities of the surrounding ecosystem.
+
+## License
+
+Apache License 2.0. See [`LICENSE`](LICENSE).
