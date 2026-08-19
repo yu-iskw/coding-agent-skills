@@ -29,7 +29,6 @@ catalog:
 .PHONY: generated-check
 generated-check:
 	python3 ./scripts/generate_catalog.py --check
-	python3 ./scripts/security_scan.py --check ./catalog/security-report.json
 
 .PHONY: check
 check: validate contracts security generated-check
