@@ -90,6 +90,18 @@ def build_outputs() -> dict[Path, str]:
     }
 
 
+def _matches(path: Path, expected: str) -> bool:
+    if not path.exists():
+        return False
+    actual = path.read_text(encoding="utf-8")
+    if path.suffix == ".json":
+        try:
+            return json.loads(actual) == json.loads(expected)
+        except json.JSONDecodeError:
+            return False
+    return actual == expected
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
@@ -98,7 +110,7 @@ def main() -> int:
     stale: list[str] = []
     for path, content in build_outputs().items():
         if args.check:
-            if not path.exists() or path.read_text(encoding="utf-8") != content:
+            if not _matches(path, content):
                 stale.append(str(path.relative_to(ROOT)))
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
