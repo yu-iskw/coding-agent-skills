@@ -1,17 +1,20 @@
 {
   "name": "coding-agent-skills",
-  "version": "0.1.0",
-  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, and Antigravity CLIs.",
+  "version": "0.2.0",
+  "description": "Verified, portable engineering skills for agent-ready repositories, with quality contracts, security checks, eval fixtures, recipes, and optional coding-agent delegation adapters.",
   "author": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
   },
   "homepage": "https://github.com/yu-iskw/coding-agent-skills",
   "repository": "https://github.com/yu-iskw/coding-agent-skills",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": [
     "coding-agent",
-    "skills",
+    "agent-skills",
+    "engineering",
+    "evaluation",
+    "security",
     "orchestration",
     "claude-code",
     "codex",
@@ -23,12 +26,12 @@
   ],
   "skills": "./skills/",
   "displayName": "Coding Agent Skills",
-  "shortDescription": "Reusable skills for orchestrating parallel AI agent workflows.",
-  "longDescription": "Coding Agent Skills transforms your repository into an Agent-Ready Environment by providing deterministic, reusable skills that enable higher autonomy, precision, and parallelism. Includes skills for orchestrating parallel tasks and executing work via Claude Code, Codex CLI, Cursor Agent CLI, GitHub Copilot CLI, Pi, Vercel Labs fx, and Google Antigravity CLI.",
+  "shortDescription": "Verified engineering skills for agent-ready repositories.",
+  "longDescription": "A curated cross-agent engineering skillpack built on portable SKILL.md packages. It adds repository discovery, planning, CI triage, risk assessment, review, security, testing, migrations, releases, documentation synchronization, composition recipes, quality contracts, security scanning, and behavioral-evaluation fixtures. Vendor-specific CLI skills remain optional delegation adapters rather than the canonical product model.",
   "developerName": "yu-iskw",
   "category": "productivity",
   "websiteURL": "https://github.com/yu-iskw/coding-agent-skills",
-  "defaultPrompt": "Use the orchestrating-parallel-tasks skill to break this task into parallel sub-tasks.",
+  "defaultPrompt": "Choose the smallest relevant engineering skill for the user's outcome, respect its declared capability level, and validate the result using repository-native checks.",
   "brandColor": "#6366f1",
   "logo": ""
 }
