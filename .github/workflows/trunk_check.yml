@@ -19,21 +19,10 @@ jobs:
     name: Trunk Check Runner
     runs-on: ubuntu-latest
     permissions:
+      checks: write
       contents: read
     steps:
-      - name: Checkout PR head
+      - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Apply pinned Prettier locally
-        run: |
-          npx --yes prettier@3.8.1 --write \
-            .claude-plugin/plugin.json \
-            README.md \
-            catalog/catalog.json \
-            docs/compatibility.md \
-            evals/README.md \
-            evals/manifest.json \
-            policies/risk-levels.md
-      - name: Print formatter diff
-        run: git --no-pager diff -- .claude-plugin/plugin.json README.md catalog/catalog.json docs/compatibility.md evals/README.md evals/manifest.json policies/risk-levels.md
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
