@@ -43,10 +43,14 @@ def main() -> int:
             errors.append(f"{directory}: missing metadata: {', '.join(sorted(missing))}")
         if metadata.get("maturity") not in MATURITY:
             errors.append(f"{directory}: invalid maturity {metadata.get('maturity')!r}")
-        if metadata.get("risk") not in RISKS:
-            errors.append(f"{directory}: invalid risk {metadata.get('risk')!r}")
-        if metadata.get("network") not in {"true", "false"}:
+        risk = metadata.get("risk")
+        network = metadata.get("network")
+        if risk not in RISKS:
+            errors.append(f"{directory}: invalid risk {risk!r}")
+        if network not in {"true", "false"}:
             errors.append(f"{directory}: network must be quoted true/false")
+        if network == "true" and risk not in {"R3", "R4"}:
+            errors.append(f"{directory}: networked skills must be classified R3 or R4")
         if name in overrides and metadata.get("category") != "integration":
             errors.append(f"{directory}: sidecar overrides are reserved for legacy integration adapters")
         if name not in overrides and REQUIRED_METADATA - set(native_metadata):
