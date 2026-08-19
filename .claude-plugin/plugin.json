@@ -1,13 +1,14 @@
 {
   "name": "coding-agent-skills",
-  "version": "0.1.0",
-  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, and Antigravity CLIs.",
+  "version": "0.2.0",
+  "description": "Verified, portable engineering skills for agent-ready repositories, with quality contracts, security checks, eval fixtures, recipes, and optional coding-agent delegation adapters.",
   "author": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
   },
   "homepage": "https://github.com/yu-iskw/coding-agent-skills",
   "repository": "https://github.com/yu-iskw/coding-agent-skills",
-  "keywords": ["coding-agent", "skills", "orchestration", "claude-code", "codex", "cursor", "copilot", "pi", "antigravity"],
+  "license": "Apache-2.0",
+  "keywords": ["coding-agent", "agent-skills", "engineering", "evaluation", "security", "orchestration"],
   "skills": "skills"
 }
