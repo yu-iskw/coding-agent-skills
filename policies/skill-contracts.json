@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "overrides": {
+    "antigravity-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "claude-code-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "codex-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "copilot-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "cursor-agent-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "fx-agent-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    },
+    "pi-agent-cli": {
+      "maturity": "beta",
+      "risk": "R3",
+      "category": "integration",
+      "network": "true",
+      "side-effects": "external-agent"
+    }
+  }
+}
