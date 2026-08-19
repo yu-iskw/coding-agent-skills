@@ -1,0 +1,30 @@
+# Copyright 2026 yu-iskw
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+name: Skill Quality
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: skill-quality-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Conformance, contracts, security, generated files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install uv
+        run: python3 -m pip install --user uv
+      - name: Run skill quality gate
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          make check
