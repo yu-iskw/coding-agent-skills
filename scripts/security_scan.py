@@ -11,6 +11,7 @@ from pathlib import Path
 from skilllib import ROOT, SKILLS_DIR
 
 TEXT_SUFFIXES = {".md", ".txt", ".sh", ".py", ".js", ".ts", ".json", ".yaml", ".yml", ".toml"}
+EXECUTABLE_SUFFIXES = {".sh", ".py", ".js", ".ts"}
 PATTERNS = [
     ("critical", "remote-pipe-shell", re.compile(r"(?:curl|wget)[^\n|]*\|\s*(?:ba)?sh\b", re.I)),
     ("critical", "decoded-payload-exec", re.compile(r"base64\s+(?:--decode|-d)[^\n|]*\|\s*(?:ba)?sh\b", re.I)),
@@ -31,15 +32,19 @@ def scan() -> dict[str, object]:
         text = path.read_text(encoding="utf-8", errors="replace")
         for line_number, line in enumerate(text.splitlines(), start=1):
             for severity, rule, pattern in PATTERNS:
-                if pattern.search(line):
-                    findings.append(
-                        {
-                            "severity": severity,
-                            "rule": rule,
-                            "path": str(path.relative_to(ROOT)),
-                            "line": line_number,
-                        }
-                    )
+                if not pattern.search(line):
+                    continue
+                effective_severity = severity
+                if severity == "critical" and path.suffix.lower() not in EXECUTABLE_SUFFIXES:
+                    effective_severity = "warning"
+                findings.append(
+                    {
+                        "severity": effective_severity,
+                        "rule": rule,
+                        "path": str(path.relative_to(ROOT)),
+                        "line": line_number,
+                    }
+                )
     return {
         "schema_version": 1,
         "scanned_files": scanned,
