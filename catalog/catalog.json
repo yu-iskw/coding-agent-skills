@@ -1,0 +1,177 @@
+{
+  "repository": "yu-iskw/coding-agent-skills",
+  "schema_version": 1,
+  "skills": [
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using Google Antigravity CLI (`agy`) with native fine-grained `allow` / `ask` / `deny` permission resources.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "antigravity-cli",
+      "path": "skills/antigravity-cli"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can inspect repository files, diffs, tests, and configuration.",
+      "contract_source": "frontmatter",
+      "description": "Assesses the blast radius and operational risk of a proposed or completed code change by tracing interfaces, data and control flows, compatibility boundaries, security implications, rollback paths, and validation gaps. Use before high-impact implementation, during review, or when deciding how much testing and rollout protection a change needs.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "review", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "change-risk-assessment",
+      "path": "skills/change-risk-assessment"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository read access; local reproduction requires command execution.",
+      "contract_source": "frontmatter",
+      "description": "Diagnoses failing continuous-integration jobs by isolating the first actionable failure, reproducing it with repository-native commands when safe, and proposing or applying the smallest evidence-backed fix. Use when CI is red, checks fail after a change, or multiple downstream failures obscure the root cause.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "validate", "maturity": "stable", "network": "false", "risk": "R2", "side-effects": "local-execution"},
+      "name": "ci-failure-triage",
+      "path": "skills/ci-failure-triage"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, auto, or bypassPermissions) based on the task type.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "claude-code-cli",
+      "path": "skills/claude-code-cli"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Suggest, Auto-Edit, or Full-Auto) based on the user's request and handles security approvals.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "codex-cli",
+      "path": "skills/codex-cli"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "copilot-cli",
+      "path": "skills/copilot-cli"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "cursor-agent-cli",
+      "path": "skills/cursor-agent-cli"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository access and local command execution for the detected package manager.",
+      "contract_source": "frontmatter",
+      "description": "Remediates a known vulnerable or broken dependency with the smallest supported dependency-file change, using the repository's native package manager and existing lockfile policy. Use when a dependency advisory, audit result, broken transitive dependency, or explicitly identified package version requires a targeted fix rather than a general upgrade campaign.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "maintain", "maturity": "beta", "network": "true", "risk": "R2", "side-effects": "repository-write-and-local-execution"},
+      "name": "dependency-remediation",
+      "path": "skills/dependency-remediation"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can read and edit repository documentation and implementation files.",
+      "contract_source": "frontmatter",
+      "description": "Synchronizes repository documentation with verified code, configuration, CLI, API, or workflow behavior by finding stale claims and making narrowly scoped documentation updates. Use after behavior changes, when README/reference docs disagree with implementation, or before release when user-facing documentation must match the repository.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "maintain", "maturity": "beta", "network": "false", "risk": "R1", "side-effects": "repository-write"},
+      "name": "documentation-sync",
+      "path": "skills/documentation-sync"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the Vercel Labs fx coding-agent CLI (`fx`) with native permission review, Agent Skills support, and narrowly scoped `fx ask` invocations.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "fx-agent-cli",
+      "path": "skills/fx-agent-cli"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can inspect repository files and the supplied issue or requirements.",
+      "contract_source": "frontmatter",
+      "description": "Converts a concrete issue or feature request into a repository-informed implementation plan with scope, affected contracts, staged tasks, acceptance criteria, validation, dependencies, and explicit non-goals. Use when work is understood well enough to plan but should not yet be implemented, especially before delegating tasks to one or more coding agents.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "plan", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "issue-to-implementation-plan",
+      "path": "skills/issue-to-implementation-plan"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can inspect repository code, configuration, schemas, and tests.",
+      "contract_source": "frontmatter",
+      "description": "Designs a safe, reversible migration plan for APIs, schemas, dependencies, infrastructure, or application architecture by inventorying current consumers, compatibility constraints, sequencing, rollout, rollback, and validation. Use when a change cannot be safely completed as a single atomic edit or must preserve compatibility during transition.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "plan", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "migration-planning",
+      "path": "skills/migration-planning"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository read access; actual delegation is performed by the host or a separate integration skill.",
+      "contract_source": "frontmatter",
+      "description": "Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents. Use when a task is described as an \"epic\", spans multiple architectural layers, or would benefit from concurrent development to reduce time-to-completion.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "orchestrate", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "orchestrating-parallel-tasks",
+      "path": "skills/orchestrating-parallel-tasks"
+    },
+    {
+      "compatibility": "Agent Skills compatible hosts",
+      "contract_source": "sidecar",
+      "description": "Executes tasks using the Pi coding agent CLI (`pi`) with explicit tool allowlists and least-privilege capability tiers. Pi also natively implements the Agent Skills standard.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "integration", "maturity": "beta", "network": "true", "risk": "R3", "side-effects": "external-agent"},
+      "name": "pi-agent-cli",
+      "path": "skills/pi-agent-cli"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can inspect repository files and a diff or pull-request patch.",
+      "contract_source": "frontmatter",
+      "description": "Reviews a pull request or local diff for correctness, regressions, security issues, broken contracts, missing tests, and maintainability risks while prioritizing actionable findings over stylistic noise. Use when asked to review code changes, validate a PR before merge, or perform an adversarial second pass on an implementation.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "review", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "pull-request-review",
+      "path": "skills/pull-request-review"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository access; executing validation/build/package commands requires local command execution.",
+      "contract_source": "frontmatter",
+      "description": "Evaluates whether a repository change or release candidate is ready to ship by checking required validation, compatibility, migrations, security, documentation, packaging, rollback, and release automation. Use before a release, tag, deployment handoff, or merge that is intended to become a release candidate.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "operate", "maturity": "beta", "network": "false", "risk": "R2", "side-effects": "local-execution"},
+      "name": "release-readiness",
+      "path": "skills/release-readiness"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts that can read repository files and version-control metadata.",
+      "contract_source": "frontmatter",
+      "description": "Systematically discovers a repository's architecture, conventions, execution paths, validation commands, ownership boundaries, and agent guidance before planning or modifying code. Use when entering an unfamiliar codebase, when a request spans multiple areas, or when implementation risk depends on understanding repository structure first.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "understand", "maturity": "stable", "network": "false", "risk": "R0", "side-effects": "none"},
+      "name": "repository-discovery",
+      "path": "skills/repository-discovery"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository read access; optional local security tools require command execution.",
+      "contract_source": "frontmatter",
+      "description": "Performs a repository-scoped security review of a change or component by identifying trust boundaries, attacker-controlled inputs, authorization and secret handling, dangerous execution paths, dependency exposure, and realistic abuse cases. Use for security-sensitive changes, pre-release review, or focused investigation of a suspected weakness.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "secure", "maturity": "beta", "network": "false", "risk": "R2", "side-effects": "local-execution"},
+      "name": "security-review",
+      "path": "skills/security-review"
+    },
+    {
+      "compatibility": "Works in Agent Skills hosts with repository read access; running tests or coverage tools requires local command execution.",
+      "contract_source": "frontmatter",
+      "description": "Identifies material behavior and failure modes that are insufficiently tested by mapping changed or critical code paths to existing test coverage and validation layers. Use before merging meaningful changes, after a regression, or when deciding which tests provide the highest confidence instead of maximizing test count.",
+      "license": "Apache-2.0",
+      "metadata": {"category": "validate", "maturity": "beta", "network": "false", "risk": "R2", "side-effects": "local-execution"},
+      "name": "test-gap-analysis",
+      "path": "skills/test-gap-analysis"
+    }
+  ]
+}
