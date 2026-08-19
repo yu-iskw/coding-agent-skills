@@ -19,10 +19,17 @@ jobs:
     name: Trunk Check Runner
     runs-on: ubuntu-latest
     permissions:
-      checks: write
       contents: read
     steps:
-      - name: Checkout
+      - name: Checkout PR head
         uses: actions/checkout@v6
-      - name: Trunk Check
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up Trunk
         uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: none
+      - name: Apply Trunk formatting locally
+        run: "${TRUNK_PATH}" fmt -a
+      - name: Print formatter diff
+        run: git --no-pager diff -- .claude-plugin/plugin.json README.md catalog/catalog.json docs/compatibility.md evals/README.md evals/manifest.json policies/risk-levels.md
