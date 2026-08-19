@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from skilllib import ROOT, discover_skills
 
@@ -17,11 +16,18 @@ def main() -> int:
     errors: list[str] = []
     names: set[str] = set()
     skills = discover_skills()
+    contracts_path = ROOT / "policies" / "skill-contracts.json"
+    contracts = json.loads(contracts_path.read_text(encoding="utf-8")) if contracts_path.exists() else {"overrides": {}}
+    overrides = contracts.get("overrides", {})
 
     for directory, frontmatter in skills:
         name = str(frontmatter.get("name", ""))
         description = str(frontmatter.get("description", ""))
-        metadata = frontmatter.get("metadata", {})
+        native_metadata = frontmatter.get("metadata", {})
+        if not isinstance(native_metadata, dict):
+            native_metadata = {}
+        metadata = dict(overrides.get(name, {}))
+        metadata.update(native_metadata)
 
         if not name:
             errors.append(f"{directory}: missing name")
@@ -31,9 +37,6 @@ def main() -> int:
             names.add(name)
         if len(description) < 30:
             errors.append(f"{directory}: description is too short for reliable routing")
-        if not isinstance(metadata, dict):
-            errors.append(f"{directory}: metadata must be a mapping")
-            continue
 
         missing = REQUIRED_METADATA - set(metadata)
         if missing:
@@ -44,6 +47,10 @@ def main() -> int:
             errors.append(f"{directory}: invalid risk {metadata.get('risk')!r}")
         if metadata.get("network") not in {"true", "false"}:
             errors.append(f"{directory}: network must be quoted true/false")
+        if name in overrides and metadata.get("category") != "integration":
+            errors.append(f"{directory}: sidecar overrides are reserved for legacy integration adapters")
+        if name not in overrides and REQUIRED_METADATA - set(native_metadata):
+            errors.append(f"{directory}: outcome/orchestration skills must declare quality metadata in SKILL.md")
 
     manifest_path = ROOT / "evals" / "manifest.json"
     if not manifest_path.exists():
