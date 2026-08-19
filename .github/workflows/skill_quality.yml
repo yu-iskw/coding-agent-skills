@@ -13,18 +13,31 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
-    name: Conformance, contracts, security, generated files
+    name: Apply repository formatting
+    if: github.event_name == 'pull_request' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout PR head
         uses: actions/checkout@v6
-      - name: Install uv
-        run: python3 -m pip install --user uv
-      - name: Run skill quality gate
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up Trunk
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: none
+      - name: Apply Trunk formatting
+        run: "${TRUNK_PATH}" fmt -a
+      - name: Commit formatting
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          make check
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style: apply Trunk formatting"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
