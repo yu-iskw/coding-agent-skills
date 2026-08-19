@@ -1,0 +1,53 @@
+name: Temporary Prettier Autofix
+
+on:
+  push:
+    branches:
+      - feat/verified-agent-ready-skillpack
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+
+      - name: Apply pinned Prettier
+        run: |
+          npx --yes prettier@3.8.1 --write \
+            .claude-plugin/plugin.json \
+            README.md \
+            catalog/catalog.json \
+            docs/compatibility.md \
+            evals/README.md \
+            evals/manifest.json \
+            policies/risk-levels.md
+
+      - name: Commit formatter output
+        run: |
+          if git diff --quiet -- \
+            .claude-plugin/plugin.json \
+            README.md \
+            catalog/catalog.json \
+            docs/compatibility.md \
+            evals/README.md \
+            evals/manifest.json \
+            policies/risk-levels.md; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            .claude-plugin/plugin.json \
+            README.md \
+            catalog/catalog.json \
+            docs/compatibility.md \
+            evals/README.md \
+            evals/manifest.json \
+            policies/risk-levels.md
+          git commit -m "style: apply pinned Prettier formatting"
+          git push
