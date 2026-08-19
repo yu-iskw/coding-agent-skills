@@ -17,18 +17,14 @@ permissions:
 
 jobs:
   quality:
-    name: Preview repository formatting
+    name: Conformance, contracts, security, generated files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR head
+      - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Set up Trunk
-        uses: trunk-io/trunk-action@v1
-        with:
-          check-mode: none
-      - name: Apply Trunk formatting locally
-        run: "${TRUNK_PATH}" fmt -a
-      - name: Print formatter diff
-        run: git --no-pager diff -- .claude-plugin/plugin.json README.md catalog/catalog.json docs/compatibility.md evals/README.md evals/manifest.json policies/risk-levels.md
+      - name: Install uv
+        run: python3 -m pip install --user uv
+      - name: Run skill quality gate
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          make check
