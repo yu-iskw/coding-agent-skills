@@ -6,12 +6,12 @@
     {
       "name": "coding-agent-skills",
       "version": "0.1.0",
-      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, and Antigravity CLIs.",
+      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, and Antigravity CLIs.",
       "source": {
         "source": "github",
         "repo": "yu-iskw/coding-agent-skills"
       },
-      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "cursor", "copilot", "pi", "antigravity"],
+      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "cursor", "copilot", "pi", "fx", "antigravity"],
       "skills": [
         {
           "name": "orchestrating-parallel-tasks",
@@ -36,6 +36,10 @@
         {
           "name": "pi-agent-cli",
           "description": "Executes tasks using the Pi coding agent CLI with explicit tool allowlists and least-privilege capability tiers."
+        },
+        {
+          "name": "fx-agent-cli",
+          "description": "Executes tasks using the Vercel Labs fx coding-agent CLI with native permission review, Agent Skills support, and narrowly scoped fx ask requests."
         },
         {
           "name": "antigravity-cli",
