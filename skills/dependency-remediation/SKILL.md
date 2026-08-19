@@ -2,10 +2,10 @@
 name: dependency-remediation
 description: Remediates a known vulnerable or broken dependency with the smallest supported dependency-file change, using the repository's native package manager and existing lockfile policy. Use when a dependency advisory, audit result, broken transitive dependency, or explicitly identified package version requires a targeted fix rather than a general upgrade campaign.
 license: Apache-2.0
-compatibility: Works in Agent Skills hosts with repository access and local command execution for the detected package manager.
+compatibility: Works in Agent Skills hosts with repository access, local command execution, and package-registry network access for the detected package manager.
 metadata:
   maturity: beta
-  risk: R2
+  risk: R3
   category: maintain
   network: "true"
   side-effects: repository-write-and-local-execution
