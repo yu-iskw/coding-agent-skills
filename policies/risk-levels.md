@@ -12,7 +12,7 @@ Risk metadata gives humans and agent hosts a fast, host-neutral summary of the m
 
 ## Required metadata
 
-Canonical skills under `skills/` must declare these string-valued metadata fields:
+New canonical outcome and orchestration skills under `skills/` declare these string-valued metadata fields directly in `SKILL.md`:
 
 ```yaml
 metadata:
@@ -25,6 +25,8 @@ metadata:
 
 `maturity` is one of `experimental`, `beta`, or `stable`. `network` describes whether the skill normally requires network access. `side-effects` is a short human-readable summary, for example `none`, `repository-write`, `local-execution`, or `external-agent`.
 
+Legacy vendor-specific delegation adapters are intentionally treated as compatibility shims. Their project-level risk contracts live in `policies/skill-contracts.json` so frequently changing vendor documentation does not need to be rewritten merely to update repository governance metadata. Generated catalog surfaces merge those sidecar contracts with skill frontmatter.
+
 ## Rules
 
 1. Classify the normal maximum capability, not the most dangerous action an agent could theoretically invent.
@@ -32,3 +34,4 @@ metadata:
 3. A skill should prefer the lowest capability that can achieve the task.
 4. Vendor-specific permission modes belong in integration adapters; canonical outcome skills remain host-neutral.
 5. Behavioral evaluation and static security scanning complement this metadata but do not turn it into a security boundary.
+6. Sidecar contract overrides are reserved for legacy integration adapters; new outcome skills must carry native frontmatter metadata.
