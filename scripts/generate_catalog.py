@@ -11,17 +11,27 @@ from skilllib import ROOT, discover_skills
 
 
 def build_outputs() -> dict[Path, str]:
+    contracts_path = ROOT / "policies" / "skill-contracts.json"
+    contracts = json.loads(contracts_path.read_text(encoding="utf-8")) if contracts_path.exists() else {"overrides": {}}
+    overrides = contracts.get("overrides", {})
+
     entries: list[dict[str, object]] = []
     for directory, frontmatter in discover_skills():
-        metadata = frontmatter.get("metadata", {})
+        name = str(frontmatter.get("name", ""))
+        native_metadata = frontmatter.get("metadata", {})
+        if not isinstance(native_metadata, dict):
+            native_metadata = {}
+        metadata = dict(overrides.get(name, {}))
+        metadata.update(native_metadata)
         entries.append(
             {
-                "name": frontmatter.get("name"),
+                "name": name,
                 "description": frontmatter.get("description"),
                 "path": str(directory.relative_to(ROOT)),
                 "license": frontmatter.get("license", "Apache-2.0"),
                 "compatibility": frontmatter.get("compatibility", "Agent Skills compatible hosts"),
                 "metadata": metadata,
+                "contract_source": "sidecar" if name in overrides else "frontmatter",
             }
         )
 
@@ -68,6 +78,7 @@ def build_outputs() -> dict[Path, str]:
         "- **Conformance:** deterministic Agent Skills syntax validation.",
         "- **Safety:** deterministic static security findings and declared R0-R4 capability metadata.",
         "- **Behavior:** observations scored against `evals/manifest.json`; results are evidence for a particular host/model/version, not certification.",
+        "- **Integration adapters:** vendor-heavy legacy CLI skills use `policies/skill-contracts.json` for risk classification so volatile vendor documentation does not need to be rewritten merely to update project metadata.",
         "",
     ]
     compatibility_text = "\n".join(compatibility_lines)
