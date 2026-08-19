@@ -1,9 +1,10 @@
 [project]
-name = "agent-skills-template"
-version = "0.1.0"
-description = "Add your description here"
+name = "coding-agent-skills"
+version = "0.2.0"
+description = "Verified, portable engineering skills for agent-ready repositories."
 readme = "README.md"
 requires-python = ">=3.12"
+license = "Apache-2.0"
 dependencies = ["skills-ref"]
 
 [tool.uv.sources]
