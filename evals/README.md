@@ -23,7 +23,10 @@ Run the fixtures through the host/model/version you want to evaluate and save ob
   "skill": "ci-failure-triage",
   "case_id": "p1",
   "selected": true,
-  "observed_steps": ["identify-failing-command", "reproduce-or-state-limitation"],
+  "observed_steps": [
+    "identify-failing-command",
+    "reproduce-or-state-limitation"
+  ],
   "observed_actions": []
 }
 ```

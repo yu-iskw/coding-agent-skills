@@ -22,20 +22,20 @@ A valid `SKILL.md` is only the starting point. This repository adds a quality co
 
 ## Choose by engineering outcome
 
-| Outcome | Skill | Normal capability |
-| --- | --- | --- |
-| Understand | [`repository-discovery`](skills/repository-discovery/) | R0 |
-| Plan | [`issue-to-implementation-plan`](skills/issue-to-implementation-plan/) | R0 |
-| Plan | [`migration-planning`](skills/migration-planning/) | R0 |
-| Validate | [`ci-failure-triage`](skills/ci-failure-triage/) | R2 |
-| Validate | [`test-gap-analysis`](skills/test-gap-analysis/) | R2 |
-| Review | [`change-risk-assessment`](skills/change-risk-assessment/) | R0 |
-| Review | [`pull-request-review`](skills/pull-request-review/) | R0 |
-| Secure | [`security-review`](skills/security-review/) | R2 |
-| Maintain | [`dependency-remediation`](skills/dependency-remediation/) | R3 |
-| Maintain | [`documentation-sync`](skills/documentation-sync/) | R1 |
-| Operate | [`release-readiness`](skills/release-readiness/) | R2 |
-| Orchestrate | [`orchestrating-parallel-tasks`](skills/orchestrating-parallel-tasks/) | R0 |
+| Outcome     | Skill                                                                  | Normal capability |
+| ----------- | ---------------------------------------------------------------------- | ----------------- |
+| Understand  | [`repository-discovery`](skills/repository-discovery/)                 | R0                |
+| Plan        | [`issue-to-implementation-plan`](skills/issue-to-implementation-plan/) | R0                |
+| Plan        | [`migration-planning`](skills/migration-planning/)                     | R0                |
+| Validate    | [`ci-failure-triage`](skills/ci-failure-triage/)                       | R2                |
+| Validate    | [`test-gap-analysis`](skills/test-gap-analysis/)                       | R2                |
+| Review      | [`change-risk-assessment`](skills/change-risk-assessment/)             | R0                |
+| Review      | [`pull-request-review`](skills/pull-request-review/)                   | R0                |
+| Secure      | [`security-review`](skills/security-review/)                           | R2                |
+| Maintain    | [`dependency-remediation`](skills/dependency-remediation/)             | R3                |
+| Maintain    | [`documentation-sync`](skills/documentation-sync/)                     | R1                |
+| Operate     | [`release-readiness`](skills/release-readiness/)                       | R2                |
+| Orchestrate | [`orchestrating-parallel-tasks`](skills/orchestrating-parallel-tasks/) | R0                |
 
 Risk levels are host-neutral classifications, not authorization boundaries. See [`policies/risk-levels.md`](policies/risk-levels.md).
 

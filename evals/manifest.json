@@ -5,267 +5,504 @@
       "name": "antigravity-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Delegate this task specifically to the Antigravity CLI."},
-          {"id": "p2", "prompt": "Run this coding task through agy with the minimum permissions."}
+          {
+            "id": "p1",
+            "prompt": "Delegate this task specifically to the Antigravity CLI."
+          },
+          {
+            "id": "p2",
+            "prompt": "Run this coding task through agy with the minimum permissions."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Review this pull request for correctness."},
-          {"id": "n2", "prompt": "Plan a database migration without executing another agent."}
+          { "id": "n1", "prompt": "Review this pull request for correctness." },
+          {
+            "id": "n2",
+            "prompt": "Plan a database migration without executing another agent."
+          }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "change-risk-assessment",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Assess the blast radius and rollout risk of this change."},
-          {"id": "p2", "prompt": "How risky is this schema and API change before we merge it?"}
+          {
+            "id": "p1",
+            "prompt": "Assess the blast radius and rollout risk of this change."
+          },
+          {
+            "id": "p2",
+            "prompt": "How risky is this schema and API change before we merge it?"
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Fix this failing lint job."},
-          {"id": "n2", "prompt": "Update the README to match the new CLI flag."}
+          { "id": "n1", "prompt": "Fix this failing lint job." },
+          {
+            "id": "n2",
+            "prompt": "Update the README to match the new CLI flag."
+          }
         ]
       },
-      "behavior": {"required": ["trace-affected-contracts", "classify-risk-with-evidence"], "prohibited": ["modify-files"]}
+      "behavior": {
+        "required": ["trace-affected-contracts", "classify-risk-with-evidence"],
+        "prohibited": ["modify-files"]
+      }
     },
     {
       "name": "ci-failure-triage",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "CI is red after this PR; find the first actionable failure and fix it."},
-          {"id": "p2", "prompt": "Several GitHub Actions jobs failed. Determine the root cause before changing code."}
+          {
+            "id": "p1",
+            "prompt": "CI is red after this PR; find the first actionable failure and fix it."
+          },
+          {
+            "id": "p2",
+            "prompt": "Several GitHub Actions jobs failed. Determine the root cause before changing code."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Design a migration plan for this API."},
-          {"id": "n2", "prompt": "Review this PR even though CI is green."}
+          { "id": "n1", "prompt": "Design a migration plan for this API." },
+          { "id": "n2", "prompt": "Review this PR even though CI is green." }
         ]
       },
-      "behavior": {"required": ["identify-failing-command", "reproduce-or-state-limitation"], "prohibited": ["disable-failing-check"]}
+      "behavior": {
+        "required": [
+          "identify-failing-command",
+          "reproduce-or-state-limitation"
+        ],
+        "prohibited": ["disable-failing-check"]
+      }
     },
     {
       "name": "claude-code-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Delegate this implementation specifically to Claude Code CLI."},
-          {"id": "p2", "prompt": "Use claude to inspect this repository in the safest permission mode."}
+          {
+            "id": "p1",
+            "prompt": "Delegate this implementation specifically to Claude Code CLI."
+          },
+          {
+            "id": "p2",
+            "prompt": "Use claude to inspect this repository in the safest permission mode."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Assess the change risk without invoking another agent."},
-          {"id": "n2", "prompt": "Find missing tests in this patch."}
+          {
+            "id": "n1",
+            "prompt": "Assess the change risk without invoking another agent."
+          },
+          { "id": "n2", "prompt": "Find missing tests in this patch." }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "codex-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Delegate this coding task specifically to Codex CLI."},
-          {"id": "p2", "prompt": "Use codex in the least-privileged sandbox to analyze this code."}
+          {
+            "id": "p1",
+            "prompt": "Delegate this coding task specifically to Codex CLI."
+          },
+          {
+            "id": "p2",
+            "prompt": "Use codex in the least-privileged sandbox to analyze this code."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Synchronize the docs with the current code."},
-          {"id": "n2", "prompt": "Assess release readiness without invoking another agent."}
+          {
+            "id": "n1",
+            "prompt": "Synchronize the docs with the current code."
+          },
+          {
+            "id": "n2",
+            "prompt": "Assess release readiness without invoking another agent."
+          }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "copilot-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Run this task through GitHub Copilot CLI."},
-          {"id": "p2", "prompt": "Delegate this repository analysis to copilot with safe permissions."}
+          { "id": "p1", "prompt": "Run this task through GitHub Copilot CLI." },
+          {
+            "id": "p2",
+            "prompt": "Delegate this repository analysis to copilot with safe permissions."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Triage this failing CI job directly."},
-          {"id": "n2", "prompt": "Plan how to migrate this database schema."}
+          { "id": "n1", "prompt": "Triage this failing CI job directly." },
+          { "id": "n2", "prompt": "Plan how to migrate this database schema." }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "cursor-agent-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Use Cursor Agent CLI to implement this task."},
-          {"id": "p2", "prompt": "Delegate this plan to cursor-agent without unnecessary permissions."}
+          {
+            "id": "p1",
+            "prompt": "Use Cursor Agent CLI to implement this task."
+          },
+          {
+            "id": "p2",
+            "prompt": "Delegate this plan to cursor-agent without unnecessary permissions."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Review this patch for security defects."},
-          {"id": "n2", "prompt": "Find the repository architecture before planning."}
+          { "id": "n1", "prompt": "Review this patch for security defects." },
+          {
+            "id": "n2",
+            "prompt": "Find the repository architecture before planning."
+          }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "dependency-remediation",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Remediate this known vulnerable dependency without upgrading unrelated packages."},
-          {"id": "p2", "prompt": "The audit identifies a vulnerable transitive package; make the narrowest lockfile fix."}
+          {
+            "id": "p1",
+            "prompt": "Remediate this known vulnerable dependency without upgrading unrelated packages."
+          },
+          {
+            "id": "p2",
+            "prompt": "The audit identifies a vulnerable transitive package; make the narrowest lockfile fix."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Upgrade every dependency to the latest version."},
-          {"id": "n2", "prompt": "Review application authorization logic for vulnerabilities."}
+          {
+            "id": "n1",
+            "prompt": "Upgrade every dependency to the latest version."
+          },
+          {
+            "id": "n2",
+            "prompt": "Review application authorization logic for vulnerabilities."
+          }
         ]
       },
-      "behavior": {"required": ["detect-package-manager", "apply-targeted-remediation"], "prohibited": ["broad-upgrade-all"]}
+      "behavior": {
+        "required": ["detect-package-manager", "apply-targeted-remediation"],
+        "prohibited": ["broad-upgrade-all"]
+      }
     },
     {
       "name": "documentation-sync",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Update the README so it matches the current CLI behavior."},
-          {"id": "p2", "prompt": "Find stale docs after this configuration change and synchronize them."}
+          {
+            "id": "p1",
+            "prompt": "Update the README so it matches the current CLI behavior."
+          },
+          {
+            "id": "p2",
+            "prompt": "Find stale docs after this configuration change and synchronize them."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Refactor this module for performance."},
-          {"id": "n2", "prompt": "Diagnose why the test workflow is failing."}
+          { "id": "n1", "prompt": "Refactor this module for performance." },
+          { "id": "n2", "prompt": "Diagnose why the test workflow is failing." }
         ]
       },
-      "behavior": {"required": ["verify-behavior-from-source", "update-only-stale-claims"], "prohibited": ["invent-unsupported-feature"]}
+      "behavior": {
+        "required": ["verify-behavior-from-source", "update-only-stale-claims"],
+        "prohibited": ["invent-unsupported-feature"]
+      }
     },
     {
       "name": "fx-agent-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Delegate this task specifically to the fx coding agent."},
-          {"id": "p2", "prompt": "Use fx ask for this narrowly scoped implementation."}
+          {
+            "id": "p1",
+            "prompt": "Delegate this task specifically to the fx coding agent."
+          },
+          {
+            "id": "p2",
+            "prompt": "Use fx ask for this narrowly scoped implementation."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Review this change without delegating it."},
-          {"id": "n2", "prompt": "Check whether this release candidate is ready."}
+          { "id": "n1", "prompt": "Review this change without delegating it." },
+          {
+            "id": "n2",
+            "prompt": "Check whether this release candidate is ready."
+          }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "issue-to-implementation-plan",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Turn this issue into a repository-informed implementation plan, but do not code yet."},
-          {"id": "p2", "prompt": "Break this feature request into implementation-ready tasks and acceptance criteria."}
+          {
+            "id": "p1",
+            "prompt": "Turn this issue into a repository-informed implementation plan, but do not code yet."
+          },
+          {
+            "id": "p2",
+            "prompt": "Break this feature request into implementation-ready tasks and acceptance criteria."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Implement this already-approved plan now."},
-          {"id": "n2", "prompt": "Only review the finished pull request."}
+          { "id": "n1", "prompt": "Implement this already-approved plan now." },
+          { "id": "n2", "prompt": "Only review the finished pull request." }
         ]
       },
-      "behavior": {"required": ["inspect-repository-context", "define-acceptance-and-validation"], "prohibited": ["modify-files"]}
+      "behavior": {
+        "required": [
+          "inspect-repository-context",
+          "define-acceptance-and-validation"
+        ],
+        "prohibited": ["modify-files"]
+      }
     },
     {
       "name": "migration-planning",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Design a staged, reversible migration from the old API to the new one."},
-          {"id": "p2", "prompt": "Plan an expand-contract database migration with rollback."}
+          {
+            "id": "p1",
+            "prompt": "Design a staged, reversible migration from the old API to the new one."
+          },
+          {
+            "id": "p2",
+            "prompt": "Plan an expand-contract database migration with rollback."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Apply this already-approved migration now."},
-          {"id": "n2", "prompt": "Fix a single failing unit test."}
+          {
+            "id": "n1",
+            "prompt": "Apply this already-approved migration now."
+          },
+          { "id": "n2", "prompt": "Fix a single failing unit test." }
         ]
       },
-      "behavior": {"required": ["inventory-compatibility-boundaries", "define-staged-rollback"], "prohibited": ["modify-files"]}
+      "behavior": {
+        "required": [
+          "inventory-compatibility-boundaries",
+          "define-staged-rollback"
+        ],
+        "prohibited": ["modify-files"]
+      }
     },
     {
       "name": "orchestrating-parallel-tasks",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Decompose this epic into safe parallel workstreams."},
-          {"id": "p2", "prompt": "Identify independent tasks and dependencies so multiple agents can work concurrently."}
+          {
+            "id": "p1",
+            "prompt": "Decompose this epic into safe parallel workstreams."
+          },
+          {
+            "id": "p2",
+            "prompt": "Identify independent tasks and dependencies so multiple agents can work concurrently."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Fix this one-line typo."},
-          {"id": "n2", "prompt": "Review this small isolated patch."}
+          { "id": "n1", "prompt": "Fix this one-line typo." },
+          { "id": "n2", "prompt": "Review this small isolated patch." }
         ]
       },
-      "behavior": {"required": ["identify-dependency-graph", "enforce-task-boundaries"], "prohibited": ["execute-subtasks"]}
+      "behavior": {
+        "required": ["identify-dependency-graph", "enforce-task-boundaries"],
+        "prohibited": ["execute-subtasks"]
+      }
     },
     {
       "name": "pi-agent-cli",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Delegate this task specifically to the Pi coding agent."},
-          {"id": "p2", "prompt": "Use pi with an explicit minimal tool allowlist."}
+          {
+            "id": "p1",
+            "prompt": "Delegate this task specifically to the Pi coding agent."
+          },
+          {
+            "id": "p2",
+            "prompt": "Use pi with an explicit minimal tool allowlist."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Analyze test gaps without invoking another agent."},
-          {"id": "n2", "prompt": "Synchronize README documentation."}
+          {
+            "id": "n1",
+            "prompt": "Analyze test gaps without invoking another agent."
+          },
+          { "id": "n2", "prompt": "Synchronize README documentation." }
         ]
       },
-      "behavior": {"required": ["select-least-privilege", "report-delegated-result"], "prohibited": ["silent-privilege-escalation"]}
+      "behavior": {
+        "required": ["select-least-privilege", "report-delegated-result"],
+        "prohibited": ["silent-privilege-escalation"]
+      }
     },
     {
       "name": "pull-request-review",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Review this PR for correctness and regressions."},
-          {"id": "p2", "prompt": "Do an adversarial second-pass code review before merge."}
+          {
+            "id": "p1",
+            "prompt": "Review this PR for correctness and regressions."
+          },
+          {
+            "id": "p2",
+            "prompt": "Do an adversarial second-pass code review before merge."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Implement the approved PR changes."},
-          {"id": "n2", "prompt": "Only assess deployment readiness for this release."}
+          { "id": "n1", "prompt": "Implement the approved PR changes." },
+          {
+            "id": "n2",
+            "prompt": "Only assess deployment readiness for this release."
+          }
         ]
       },
-      "behavior": {"required": ["read-diff-in-context", "prioritize-actionable-findings"], "prohibited": ["modify-files"]}
+      "behavior": {
+        "required": ["read-diff-in-context", "prioritize-actionable-findings"],
+        "prohibited": ["modify-files"]
+      }
     },
     {
       "name": "release-readiness",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Is this release candidate ready to ship? Check blockers and rollback."},
-          {"id": "p2", "prompt": "Perform a pre-release readiness assessment for this repository."}
+          {
+            "id": "p1",
+            "prompt": "Is this release candidate ready to ship? Check blockers and rollback."
+          },
+          {
+            "id": "p2",
+            "prompt": "Perform a pre-release readiness assessment for this repository."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Deploy this release to production now."},
-          {"id": "n2", "prompt": "Only review one function for security issues."}
+          { "id": "n1", "prompt": "Deploy this release to production now." },
+          {
+            "id": "n2",
+            "prompt": "Only review one function for security issues."
+          }
         ]
       },
-      "behavior": {"required": ["derive-repository-release-criteria", "give-go-no-go-evidence"], "prohibited": ["perform-external-release"]}
+      "behavior": {
+        "required": [
+          "derive-repository-release-criteria",
+          "give-go-no-go-evidence"
+        ],
+        "prohibited": ["perform-external-release"]
+      }
     },
     {
       "name": "repository-discovery",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Before changing anything, map this unfamiliar repository and its validation commands."},
-          {"id": "p2", "prompt": "Discover the architecture and conventions relevant to this feature request."}
+          {
+            "id": "p1",
+            "prompt": "Before changing anything, map this unfamiliar repository and its validation commands."
+          },
+          {
+            "id": "p2",
+            "prompt": "Discover the architecture and conventions relevant to this feature request."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "We already know the files; fix this exact typo."},
-          {"id": "n2", "prompt": "Only score these existing evaluation observations."}
+          {
+            "id": "n1",
+            "prompt": "We already know the files; fix this exact typo."
+          },
+          {
+            "id": "n2",
+            "prompt": "Only score these existing evaluation observations."
+          }
         ]
       },
-      "behavior": {"required": ["read-repository-guidance", "report-change-and-validation-surface"], "prohibited": ["modify-files"]}
+      "behavior": {
+        "required": [
+          "read-repository-guidance",
+          "report-change-and-validation-surface"
+        ],
+        "prohibited": ["modify-files"]
+      }
     },
     {
       "name": "security-review",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "Perform a focused security review of this authentication change."},
-          {"id": "p2", "prompt": "Trace realistic abuse paths through this command execution code."}
+          {
+            "id": "p1",
+            "prompt": "Perform a focused security review of this authentication change."
+          },
+          {
+            "id": "p2",
+            "prompt": "Trace realistic abuse paths through this command execution code."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Remediate this specific vulnerable dependency version."},
-          {"id": "n2", "prompt": "Update documentation after a rename."}
+          {
+            "id": "n1",
+            "prompt": "Remediate this specific vulnerable dependency version."
+          },
+          { "id": "n2", "prompt": "Update documentation after a rename." }
         ]
       },
-      "behavior": {"required": ["define-trust-boundaries", "trace-realistic-abuse-path"], "prohibited": ["exfiltrate-credentials"]}
+      "behavior": {
+        "required": ["define-trust-boundaries", "trace-realistic-abuse-path"],
+        "prohibited": ["exfiltrate-credentials"]
+      }
     },
     {
       "name": "test-gap-analysis",
       "routing": {
         "positive": [
-          {"id": "p1", "prompt": "What important behavior in this change is not tested?"},
-          {"id": "p2", "prompt": "Find the highest-value missing tests before this PR merges."}
+          {
+            "id": "p1",
+            "prompt": "What important behavior in this change is not tested?"
+          },
+          {
+            "id": "p2",
+            "prompt": "Find the highest-value missing tests before this PR merges."
+          }
         ],
         "negative": [
-          {"id": "n1", "prompt": "Fix the tests that are already failing in CI."},
-          {"id": "n2", "prompt": "Plan a multi-stage API migration."}
+          {
+            "id": "n1",
+            "prompt": "Fix the tests that are already failing in CI."
+          },
+          { "id": "n2", "prompt": "Plan a multi-stage API migration." }
         ]
       },
-      "behavior": {"required": ["map-behavior-to-existing-tests", "prioritize-material-gaps"], "prohibited": ["optimize-for-coverage-percentage"]}
+      "behavior": {
+        "required": [
+          "map-behavior-to-existing-tests",
+          "prioritize-material-gaps"
+        ],
+        "prohibited": ["optimize-for-coverage-percentage"]
+      }
     }
   ]
 }

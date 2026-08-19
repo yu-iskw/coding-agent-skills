@@ -2,12 +2,12 @@
 
 Risk metadata gives humans and agent hosts a fast, host-neutral summary of the maximum capability a skill normally needs. It is classification evidence, not an authorization mechanism.
 
-| Level | Capability boundary | Examples |
-| --- | --- | --- |
-| **R0** | Read/reason only | repository discovery, planning, review |
-| **R1** | Repository writes | documentation edits, source changes without command execution |
-| **R2** | Local command execution | tests, builds, package-manager remediation, local scanners |
-| **R3** | Network or external systems | remote agent delegation, API calls, fetching remote state |
+| Level  | Capability boundary                                                 | Examples                                                           |
+| ------ | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **R0** | Read/reason only                                                    | repository discovery, planning, review                             |
+| **R1** | Repository writes                                                   | documentation edits, source changes without command execution      |
+| **R2** | Local command execution                                             | tests, builds, package-manager remediation, local scanners         |
+| **R3** | Network or external systems                                         | remote agent delegation, API calls, fetching remote state          |
 | **R4** | Credentials, deployment, destructive or high-impact external writes | production deploys, secret rotation, irreversible remote mutations |
 
 ## Required metadata
