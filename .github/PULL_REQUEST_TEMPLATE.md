@@ -16,7 +16,7 @@
 - [ ] Positive and negative routing fixtures are present/updated.
 - [ ] Required and prohibited behavior assertions are present/updated.
 - [ ] `make security` passes without unexplained critical findings.
-- [ ] Generated catalog/security evidence is current.
+- [ ] Generated catalog and discovery files are current.
 
 ## Validation
 
