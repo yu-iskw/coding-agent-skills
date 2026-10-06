@@ -6,12 +6,24 @@
     {
       "name": "coding-agent-skills",
       "version": "0.1.0",
-      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, and Antigravity CLIs.",
+      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, Antigravity, and DeepSeek Harness CLIs.",
       "source": {
         "source": "github",
         "repo": "yu-iskw/coding-agent-skills"
       },
-      "keywords": ["orchestration", "parallel-tasks", "claude-code", "codex", "cursor", "copilot", "pi", "fx", "antigravity"],
+      "keywords": [
+        "orchestration",
+        "parallel-tasks",
+        "claude-code",
+        "codex",
+        "cursor",
+        "copilot",
+        "pi",
+        "fx",
+        "antigravity",
+        "deepseek-harness",
+        "dsh"
+      ],
       "skills": [
         {
           "name": "orchestrating-parallel-tasks",
@@ -26,12 +38,16 @@
           "description": "Executes tasks using the Codex CLI. Automatically determines the least privilege required based on the user's request."
         },
         {
+          "name": "copilot-cli",
+          "description": "Executes tasks using the GitHub Copilot CLI. Automatically determines the safest permission mode based on the task type."
+        },
+        {
           "name": "cursor-agent-cli",
           "description": "Executes tasks using the Cursor Agent CLI. Provides structured modes for planning, Q&A, and full automation with safety guardrails."
         },
         {
-          "name": "copilot-cli",
-          "description": "Executes tasks using the GitHub Copilot CLI. Automatically determines the safest permission mode based on the task type."
+          "name": "deepseek-harness-cli",
+          "description": "Executes tasks using DeepSeek Harness CLI (dsh) via the headless profile; mirrors skills into .dsh/skills for in-Harness discovery."
         },
         {
           "name": "pi-agent-cli",

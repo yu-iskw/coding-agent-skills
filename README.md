@@ -18,7 +18,7 @@ Standard agents operate in a single-session vacuum. Coding Agent Skills provide:
 2.  **Deterministic SOPs**: Standardize complex workflows (e.g., security audits, library upgrades) as executable SOPs that ensure zero steps are skipped.
 3.  **Context Hygiene**: Use progressive disclosure to feed agents only the data they need, maintaining high reasoning quality.
 4.  **Autonomous Fixer Loops**: Encapsulate `Test -> Analyze -> Fix` loops so agents self-correct without human intervention.
-5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, **fx**, and **Google Antigravity CLI**.
+5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, **fx**, **Google Antigravity CLI**, and **DeepSeek Harness** (`dsh`).
 6.  **Safety Governance**: Define granular permission modes per skill to manage risk in autonomous executions.
 7.  **Institutional Memory**: Codify "Tribal Knowledge" into skills so every agent (and human) operates at an expert level.
 8.  **Sub-Agent Specialization**: Spin up micro-personas (e.g., "SQL Optimizer") for domain-specific precision.
@@ -38,8 +38,9 @@ This repository includes the following coding agent skills:
 - **[orchestrating-parallel-tasks](skills/orchestrating-parallel-tasks/)**: Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents. Use when a task is described as an "epic", spans multiple architectural layers, or would benefit from concurrent development to reduce time-to-completion.
 - **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, or bypassPermissions) based on the task type.
 - **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Read-Only, Editor, or Autonomous) based on the user's request and handles security approvals.
-- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.
 - **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
+- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.
+- **[deepseek-harness-cli](skills/deepseek-harness-cli/)**: Executes tasks using DeepSeek Harness CLI (`dsh`) via the headless profile, with Harness permission presets and Agent Skills discovery under `.dsh/skills` and `.agents/skills`. Harness is in developer preview.
 - **[pi-agent-cli](skills/pi-agent-cli/)**: Executes tasks using the Pi coding agent CLI (`pi`) with explicit tool allowlists and least-privilege capability tiers. Pi also natively implements the Agent Skills standard.
 - **[fx-agent-cli](skills/fx-agent-cli/)**: Executes tasks using the Vercel Labs fx coding-agent CLI (`fx`) with native permission review, Agent Skills support, and narrowly scoped `fx ask` invocations.
 - **[antigravity-cli](skills/antigravity-cli/)**: Executes tasks using Google Antigravity CLI (`agy`) with native fine-grained `allow` / `ask` / `deny` permission resources.
@@ -65,7 +66,7 @@ Execute -> Validate -> Report
 Escalate only if required
 ```
 
-For example, Pi uses explicit `--tools` allowlists, fx uses native permission review and persistent permission rules, while Antigravity uses fine-grained permission resources. This repository does not force heterogeneous agents into a lowest-common-denominator CLI abstraction.
+For example, Pi uses explicit `--tools` allowlists, fx uses native permission review and persistent permission rules, Antigravity uses fine-grained permission resources, and DeepSeek Harness uses profile permission presets plus prompt scope (inspect with `dsh --profile headless --dump-config`). This repository does not force heterogeneous agents into a lowest-common-denominator CLI abstraction.
 
 ## Pi Compatibility
 
@@ -90,6 +91,12 @@ Or install only the fx delegation skill:
 ```
 
 The `fx-agent-cli` skill is complementary: it describes how another agent or workflow can invoke fx as a delegated execution agent through narrowly scoped `fx ask` requests while preserving fx's native permission model.
+
+## DeepSeek Harness Compatibility
+
+DeepSeek Harness (`dsh`) discovers Agent Skills under **`.dsh/skills`** and **`.agents/skills`**, not this repo's top-level `skills/` until you mirror packages there. Setup and symlink examples: [skills/deepseek-harness-cli/references/usage-examples.md](skills/deepseek-harness-cli/references/usage-examples.md).
+
+The `deepseek-harness-cli` skill is complementary: it describes how another agent or workflow invokes `dsh` through narrowly scoped `dsh --profile headless` runs while preserving Harness's profile and permission model.
 
 ## Gemini CLI Retirement
 
@@ -184,4 +191,5 @@ Once installed, skills are available under the `coding-agent-skills` namespace:
 /coding-agent-skills:pi-agent-cli
 /coding-agent-skills:fx-agent-cli
 /coding-agent-skills:antigravity-cli
+/coding-agent-skills:deepseek-harness-cli
 ```
