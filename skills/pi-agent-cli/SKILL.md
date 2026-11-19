@@ -11,6 +11,10 @@ Use this skill to perform coding, review, research, or automation tasks through 
 
 Pi implements the Agent Skills standard and can also consume compatible `SKILL.md` files directly. This skill covers the other direction: invoking Pi as an execution agent from another coding-agent workflow.
 
+## Preflight
+
+Check `pi --version` and `pi --help` against the [Pi command-line reference](https://docs.pi.dev/latest/cli). Use `pi --list-models` for discovery and `pi auth check --provider "<provider>"` where supported. A catalog entry or configured credential does not prove entitlement. Preserve native selection unless the user requests an eligible model. Pass the exact `<provider>/<model-id>` with `--model` and verify it to avoid a fuzzy match. Pi's separate `--provider` flag requires `--model`.
+
 ## Security Model
 
 Pi runs with the operating-system permissions of the user that launches it. Project trust controls whether project-local settings, skills, extensions, and related resources are loaded; it is **not** a sandbox and does not restrict what enabled tools can do.
@@ -19,11 +23,11 @@ For untrusted repositories, unattended execution, or high-impact tasks, run Pi i
 
 ## Capability Tiers
 
-| Tier | Capability | Pi tools | Approval required | Typical tasks |
-| :--- | :--------- | :------- | :---------------- | :------------ |
-| **0** | Observe | `read,grep,find,ls` | No | Code review, audits, architecture analysis, local research |
-| **1** | Edit | `read,grep,find,ls,edit,write` | Yes | Refactoring, documentation, mechanical fixes |
-| **2** | Execute | Add `bash` only when required | Yes (High Risk) | Tests, builds, dependency changes, scripted automation |
+| Tier  | Capability | Pi tools                       | Approval required | Typical tasks                                              |
+| :---- | :--------- | :----------------------------- | :---------------- | :--------------------------------------------------------- |
+| **0** | Observe    | `read,grep,find,ls`            | No                | Code review, audits, architecture analysis, local research |
+| **1** | Edit       | `read,grep,find,ls,edit,write` | Yes               | Refactoring, documentation, mechanical fixes               |
+| **2** | Execute    | Add `bash` only when required  | Yes (High Risk)   | Tests, builds, dependency changes, scripted automation     |
 
 ## Implementation Workflow
 
@@ -47,16 +51,16 @@ Do not interpret Pi project trust as approval to modify files, execute commands,
 
 ```bash
 # Tier 0: read-only analysis
-pi --tools read,grep,find,ls -p "<prompt>"
+pi --no-extensions --tools read,grep,find,ls -p "<prompt>"
 
 # Tier 1: workspace editing without shell execution
-pi --tools read,grep,find,ls,edit,write -p "<prompt>"
+pi --no-extensions --tools read,grep,find,ls,edit,write -p "<prompt>"
 
 # Tier 2: shell execution explicitly enabled
-pi --tools read,grep,find,ls,edit,write,bash -p "<prompt>"
+pi --no-extensions --tools read,grep,find,ls,edit,write,bash -p "<prompt>"
 ```
 
-Prefer `--tools` over relying on the default built-in tool set. If no tools are required, use `--no-tools`.
+Prefer `--tools` over relying on the default built-in tool set. If no tools are required, use `--no-tools`. The examples disable extensions because extensions run code and can change the exposed tools. If the selected provider needs an extension, inspect that extension and its capabilities before enabling it. Restrict MCP exposure and other project resources separately when required.
 
 ### 4. Validate the result
 

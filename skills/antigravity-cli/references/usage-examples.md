@@ -14,6 +14,7 @@ Keep workspace reads available while denying mutation and command execution for 
     "deny": [
       "write_file(*)",
       "command(*)",
+      "mcp(*)",
       "execute_url(*)",
       "unsandboxed(*)"
     ]
@@ -21,15 +22,13 @@ Keep workspace reads available while denying mutation and command execution for 
 }
 ```
 
-Then launch:
+After verifying that the effective rules cover the task, run:
 
 ```bash
-agy
+agy --prompt "Review the parser and identify untested edge cases." --output-format json
 ```
 
-Prompt example:
-
-> Review the architecture and security boundaries of this repository. Do not modify files or perform external side effects.
+Check the result status and stderr for any skipped operations. Use an isolated workspace when the native rules cannot enforce the required file or integration scope.
 
 ## Tier 1: Workspace Development
 

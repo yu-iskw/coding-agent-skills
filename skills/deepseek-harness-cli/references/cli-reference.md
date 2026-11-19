@@ -43,7 +43,8 @@ Shorthand: `dsh web` boots the Web profile; `dsh --profile headless "job"` runs 
 - **Exit codes**: `0` on completed turn; `1` otherwise.
 - **`--json`**: NDJSON event stream on stdout; diagnostics remain on stderr.
 - **`--session-id`**: adopt persisted session; strict cwd, preset, and ownership checks.
-- **`--help`**: profile app help; does not run a task.
+- **`--permission-mode <preset>`** and **`--approval-policy <policy>`**: select a configured preset and approval behavior on versions that expose these options.
+- **`--help`**: profile app help and installed option list.
 
 Full event vocabulary and truncation limits: headless bundle README.
 
@@ -80,7 +81,7 @@ Use a model slug from [openrouter.ai/models](https://openrouter.ai/models). Conf
 
 ## Permissions (base-backed profiles)
 
-Base-backed surfaces (including headless over `dsh-base`) default new sessions to the `workspace-write` permission preset unless configured otherwise. Process-wide fallback may be influenced by `DSH_PERMISSION_MODE`. This is not equivalent to a fixed read-only CLI flag—combine prompt constraints, presets, and patches for least privilege.
+Base-backed surfaces (including headless over `dsh-base`) default new sessions to the `workspace-write` permission preset unless configured otherwise. Process-wide fallback may be influenced by `DSH_PERMISSION_MODE`. Inspect the configured presets and select one whose actual permissions fit the request. Pair these controls with containment if the required boundary exceeds the native policy.
 
 Inspect composition without booting:
 

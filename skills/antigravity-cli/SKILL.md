@@ -1,6 +1,6 @@
 ---
 name: antigravity-cli
-description: Executes coding, review, research, and automation tasks using Google Antigravity CLI (`agy`). Uses Antigravity's native fine-grained allow/ask/deny permissions instead of Gemini CLI approval modes.
+description: Executes coding, review, research, and automation tasks using Google Antigravity CLI (`agy`). Uses native fine-grained permission rules for interactive or headless execution.
 ---
 
 # executing-antigravity
@@ -11,14 +11,18 @@ Use this skill to perform coding, review, research, or automation tasks with Goo
 
 Antigravity represents sensitive operations as permission resources such as `read_file(...)`, `write_file(...)`, `command(...)`, `read_url(...)`, `execute_url(...)`, `mcp(...)`, and `unsandboxed(...)` and evaluates configured rules using `deny > ask > allow` precedence.
 
+## Preflight
+
+Check the installed `agy` version and `agy --help` against the [headless reference](https://antigravity.google/docs/cli/headless/) and [permission rules](https://antigravity.google/docs/cli-permissions). Confirm the active account and effective settings. Preserve native model selection unless the user requests an eligible model. Use `--model "<model>"` only with a verified headless model ID.
+
 ## Capability Profiles
 
 These profiles are repository conventions, not Antigravity-native mode names.
 
-| Tier | Profile | Intended capability | Typical tasks |
-| :--- | :------ | :------------------ | :------------ |
-| **0** | Analysis | Workspace reading; mutation and external actuation blocked or gated | Code review, audits, architecture analysis |
-| **1** | Workspace development | Workspace reads/writes; commands, MCP, and web actuation gated | Refactoring, documentation, implementation |
+| Tier  | Profile                         | Intended capability                                                                                  | Typical tasks                                      |
+| :---- | :------------------------------ | :--------------------------------------------------------------------------------------------------- | :------------------------------------------------- |
+| **0** | Analysis                        | Workspace reading; mutation and external actuation blocked or gated                                  | Code review, audits, architecture analysis         |
+| **1** | Workspace development           | Workspace reads/writes; commands, MCP, and web actuation gated                                       | Refactoring, documentation, implementation         |
 | **2** | Controlled autonomous execution | Explicit allowlist for necessary commands or integrations; destructive/high-impact operations denied | Tests, builds, dependency work, bounded automation |
 
 ## Implementation Workflow
@@ -37,7 +41,7 @@ Use the least capable profile that can complete the task.
 
 Antigravity permissions are configured in the user's Antigravity CLI settings. Unconfigured workspace reads/writes are normally auto-allowed; web browsing and other unconfigured sensitive actions normally fall back to Ask.
 
-Before unattended or high-impact execution, ensure the effective policy matches the task. Remember that broader `ask` or `deny` rules can override narrower `allow` rules because precedence is `deny > ask > allow`.
+Before launching any scoped task, ensure the effective policy matches it. An analysis request requires explicit enforcement against writes because workspace writes may be allowed by default. Restrict MCP, shell, and browser or network capabilities to the authorized scope. Remember that broader `ask` or `deny` rules can override narrower `allow` rules because precedence is `deny > ask > allow`.
 
 ### 3. Prefer explicit resource policies
 
@@ -65,13 +69,13 @@ Treat this as an example, not a universal policy. Adapt targets to the repositor
 
 ### 4. Execute
 
-Launch Antigravity CLI with:
+In an authorized workspace with verified policy, run one headless task:
 
 ```bash
-agy
+agy --prompt "Explain how the parser handles invalid input." --output-format json
 ```
 
-Use the TUI to submit the task. Use `/permissions` to inspect or manage permission rules interactively when needed.
+Check both the JSON status and stderr. Headless mode can skip an action requiring approval and still exit successfully. Use `agy` and `/permissions` to inspect rules and handle approvals interactively when needed.
 
 For autonomous execution, make the requested scope explicit in the prompt: files that may change, commands that may run, validation criteria, and operations that must not occur.
 
@@ -95,14 +99,9 @@ After execution:
 - **GATE** MCP mutations, browser actuation, network side effects, and unsandboxed execution according to their impact.
 - **REVIEW** diffs and validation output before treating the task as complete.
 
-## Migration from Gemini CLI
+## Gemini CLI compatibility
 
-Gemini CLI-specific concepts in the retired skill must not be carried forward mechanically:
-
-- `gemini` command -> `agy` application
-- `plan` / `auto_edit` / `yolo` -> task-specific Antigravity permission resources
-- Gemini sandbox assumptions -> Antigravity's current permission and sandbox controls
-- Gemini-specific model flags and quota guidance -> configure through current Antigravity mechanisms
+Antigravity has its own permission resources. Use this adapter only for `agy` and consult [Gemini CLI's separate headless reference](https://geminicli.com/docs/cli/headless/) for `gemini`.
 
 ## Examples
 

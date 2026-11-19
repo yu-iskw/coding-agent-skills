@@ -16,11 +16,11 @@ When upgrading from a version with the parallel orchestration skills, update pro
 
 <!-- START-SKILLS -->
 
-- **[antigravity-cli](skills/antigravity-cli/)**: Executes coding, review, research, and automation tasks using Google Antigravity CLI (`agy`). Uses Antigravity's native fine-grained allow/ask/deny permissions instead of Gemini CLI approval modes.
-- **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, auto, or bypassPermissions) based on the task type.
-- **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Suggest, Auto-Edit, or Full-Auto) based on the user's request and handles security approvals.
-- **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
-- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI (`cursor-agent`). Provides structured modes for planning, Q&A, and full automation with safety guardrails.
+- **[antigravity-cli](skills/antigravity-cli/)**: Executes coding, review, research, and automation tasks using Google Antigravity CLI (`agy`). Uses native fine-grained permission rules for interactive or headless execution.
+- **[claude-code-cli](skills/claude-code-cli/)**: Delegates one task to Claude Code in print mode. Uses native permission modes and tool restrictions for scoped code review, editing, or validation.
+- **[codex-cli](skills/codex-cli/)**: Delegates one task to the OpenAI Codex CLI using codex exec and the narrowest supported sandbox and approval policy. Use for scoped code review, implementation, or validation.
+- **[copilot-cli](skills/copilot-cli/)**: Delegates one task to GitHub Copilot CLI in prompt mode. Uses a tool availability list and scoped approvals for code review, workspace edits, and targeted validation.
+- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Delegates one task to Cursor CLI in print mode. Uses Ask or Plan mode for analysis and native permissions and sandbox controls for authorized edits and command execution.
 - **[deepseek-harness-cli](skills/deepseek-harness-cli/)**: Executes coding, review, research, and automation tasks using DeepSeek Harness CLI (`dsh`) via the headless profile. Uses Harness permission presets and profile composition while requiring external containment for untrusted or unattended work. DeepSeek Harness is in developer preview.
 - **[fx-agent-cli](skills/fx-agent-cli/)**: Executes coding, review, research, and automation tasks using the Vercel Labs fx coding-agent CLI (`fx`). Uses fx's native permission review, Agent Skills support, and single-request `fx ask` workflow while requiring external containment for untrusted or unattended work.
 - **[pi-agent-cli](skills/pi-agent-cli/)**: Executes coding, review, research, and automation tasks using the Pi coding agent CLI (`pi`). Uses explicit tool allowlists to apply least privilege and distinguishes project trust from sandboxing.
@@ -80,11 +80,9 @@ DeepSeek Harness (`dsh`) discovers Agent Skills under **`.dsh/skills`** and **`.
 
 The `deepseek-harness-cli` skill is complementary: it describes how another agent or workflow invokes `dsh` through narrowly scoped `dsh --profile headless` runs while preserving Harness's profile and permission model.
 
-## Gemini CLI Retirement
+## Google Antigravity CLI and Gemini CLI
 
-Gemini CLI support has been removed. Google transitioned consumer Gemini CLI workflows to Antigravity CLI; use the `antigravity-cli` skill for Google coding-agent CLI execution.
-
-The migration is intentionally not a command rename: Gemini CLI approval modes such as `plan`, `auto_edit`, and `yolo` do not map directly to Antigravity's fine-grained permission engine.
+The bundled `antigravity-cli` skill targets `agy`. Google moved individual Google AI Pro, Google AI Ultra, and free-tier Gemini CLI users to Antigravity CLI in June 2026. Gemini CLI remains available through supported enterprise licenses and API-key authentication. See [Google's announcement](https://github.com/google-gemini/gemini-cli/discussions/28017) and the [Gemini CLI headless reference](https://geminicli.com/docs/cli/headless/).
 
 ## Codex Plugin
 
@@ -124,7 +122,7 @@ to `.agents/plugins/marketplace.json` in your repository:
 This repository is published as a Claude Code plugin. Install it to use the skills
 directly from within any Claude Code session.
 
-### Option 1: Via Custom Marketplace (Recommended)
+### Option 1: Claude Code Marketplace (Recommended)
 
 Add this repository as a custom marketplace, then install the plugin:
 
