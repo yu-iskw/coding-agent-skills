@@ -1,5 +1,7 @@
 # Claude Code Research
 
+These are historical research notes. See the [claude-code-cli skill](../../skills/claude-code-cli/SKILL.md) for maintained invocation and permission guidance.
+
 Executive summary (as of March 2026)
 • Claude Code is a terminal-based agent designed for high-autonomy coding tasks, including reading, editing, and executing code within a repository.
 • The tool is built on a robust permission-gated architecture that balances developer speed with security governance.
@@ -156,7 +158,7 @@ Use `/model <shorthand>` inside an interactive session to switch without restart
 
 F. Cloud Execution and Remote Control (March 2026)
 
-**Cloud Execution** *(research preview — Pro / Max / Team / Enterprise)*
+**Cloud Execution** _(research preview — Pro / Max / Team / Enterprise)_
 Tasks run on Anthropic-managed VMs in isolated containers. No local machine required.
 
 - Launch: `claude --remote “<task>”`
@@ -166,7 +168,7 @@ Tasks run on Anthropic-managed VMs in isolated containers. No local machine requ
 - VM includes Python, Node.js, Ruby, Go, Rust, PostgreSQL, Redis, and common build tools
 - Network access: limited allowlist (package registries, GitHub, cloud platforms); configurable
 
-**Remote Control** *(GA — Feb 2026)*
+**Remote Control** _(GA — Feb 2026)_
 Code stays on your local machine. Provides synchronized multi-device access.
 
 - Handoff: `/teleport` or `claude --teleport [session-id]`

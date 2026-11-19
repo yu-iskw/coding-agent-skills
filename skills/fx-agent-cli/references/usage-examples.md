@@ -7,13 +7,13 @@ This reference shows how to delegate common coding-agent tasks to fx while keepi
 **Intent**: Review repository architecture without making changes.
 
 ```bash
-fx ask "Review this repository's architecture, identify major risks, and do not modify files or perform side effects."
+fx ask --permission-mode ask "Review this repository's architecture, identify major risks, and do not modify files or perform side effects."
 ```
 
 **Intent**: Perform a focused security review.
 
 ```bash
-fx ask "Inspect the authentication and authorization code for security weaknesses. Do not modify files or run commands that create side effects."
+fx ask --permission-mode ask "Inspect the authentication and authorization code for security weaknesses. Do not modify files or run commands that create side effects."
 ```
 
 For review tasks, reject or avoid any permission request that would mutate the workspace or perform unrelated external actions.
@@ -23,7 +23,7 @@ For review tasks, reject or avoid any permission request that would mutate the w
 **Intent**: Update documentation without running validation commands.
 
 ```bash
-fx ask "Update the README to document the new configuration option. Limit changes to workspace files and do not run tests, package managers, Git commands, or external side effects."
+fx ask --permission-mode ask "Update the README to document the new configuration option. Limit changes to workspace files and do not run tests, package managers, Git commands, or external side effects."
 ```
 
 Inspect the diff after completion before accepting the result.
@@ -33,13 +33,13 @@ Inspect the diff after completion before accepting the result.
 **Intent**: Fix a failing test and validate the change.
 
 ```bash
-fx ask "Run the smallest relevant test target, diagnose the failure, fix it, rerun only that test, and report the commands and results. Avoid unrelated changes or external side effects."
+fx ask --permission-mode ask "Run the smallest relevant test target, diagnose the failure, fix it, rerun only that test, and report the commands and results. Avoid unrelated changes or external side effects."
 ```
 
 **Intent**: Perform a build after a code change.
 
 ```bash
-fx ask "Implement the requested change, run the repository's documented formatter and targeted tests only, and report every validation result."
+fx ask --permission-mode ask "Implement the requested change, run the repository's documented formatter and targeted tests only, and report every validation result."
 ```
 
 ## Installing Agent Skills into fx

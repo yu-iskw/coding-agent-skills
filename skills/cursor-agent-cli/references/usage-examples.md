@@ -1,95 +1,28 @@
-# Cursor Agent Usage Examples
+# Cursor CLI usage examples
 
-## Scenario 1: Planning a Refactor (Plan Mode)
+Use the installed name and check its flags against the current CLI reference.
 
-**User Intent**: "Plan how to refactor the database layer to use a repository pattern."
-
-**Command**:
+## Read-only explanation
 
 ```bash
-cursor-agent --print --mode plan "Analyze the current database layer and propose a refactor plan to use the repository pattern. Focus on decoupling the business logic from the ORM."
+agent --print --mode ask --sandbox enabled --output-format text \
+  "Explain how the parser validates user input. Cite the relevant files."
 ```
 
-## Scenario 2: Explaining Complex Code (Ask Mode)
-
-**User Intent**: "How does the authentication middleware work?"
-
-**Command**:
+## Plan an implementation
 
 ```bash
-cursor-agent --print --mode ask "Explain the logic in src/middleware/auth.ts and how it validates JWT tokens."
+agent --print --mode plan --sandbox enabled --output-format json \
+  "Propose a refactor of src/parser.py and list the tests to run."
 ```
 
-## Scenario 3: Automated Bug Fix (Default Mode)
+## Edit with verified permissions
 
-**User Intent**: "Fix the failing tests in the user service."
-
-**Approval Prompt**: "I've detected that this task requires full agent permissions to modify files and execute commands. OK to proceed with `cursor-agent`?"
-
-**Command**:
+Use only after authorizing edits and verifying the effective file, shell and integration rules for this workspace.
 
 ```bash
-cursor-agent --print "Run the tests in services/user-service.test.ts, identify the cause of any failures, and apply the necessary fixes."
+agent --print --sandbox enabled --output-format json \
+  "Update docs/usage.md for the existing parser option and report the changes."
 ```
 
-## Scenario 4: Exploring MCP Tools
-
-**User Intent**: "What tools are available in the 'google-search' MCP?"
-
-**Command**:
-
-```bash
-cursor-agent mcp list-tools google-search
-```
-
-## Scenario 5: Generating Project Rules
-
-**User Intent**: "Create a rule for consistent error handling."
-
-**Command**:
-
-```bash
-cursor-agent generate-rule "Ensure all API endpoints follow the RFC 7807 problem details standard for error responses."
-```
-
-## Scenario 6: Resuming a Prior Session
-
-**User Intent**: "Continue from where I left off in the last session."
-
-**Command**:
-
-```bash
-# Resume the most recent conversation
-cursor-agent --resume
-
-# Resume a specific conversation by thread ID
-cursor-agent --resume <thread-id>
-
-# List all available prior conversations
-cursor-agent ls
-```
-
-## Scenario 7: Cloud Handoff for Background Execution
-
-**User Intent**: "Start this long-running migration task and let it continue while I'm away."
-
-**Usage** (within interactive `cursor-agent` session):
-
-```text
-& Run the full database migration, execute all integration tests, and open a PR if tests pass.
-```
-
-The agent hands off to Cursor's Cloud Agent and continues asynchronously. Resume at `cursor.com/agents`.
-
-## Scenario 8: Cursor Automation for PR Review
-
-**User Intent**: "Automatically review every PR for security issues."
-
-**Setup** (configure once at `cursor.com/settings/automations`):
-
-- **Trigger**: GitHub — PR opened or updated
-- **Instructions**: "Review the diff for security vulnerabilities (OWASP Top 10, injection, insecure dependencies). Post a comment summarizing any findings and their severity. Label the PR `security-review-needed` if critical issues are found."
-- **MCPs**: GitHub (for PR comments and labels)
-- **Verify output**: Check that a comment is posted before marking complete
-
-Once configured, the automation runs in a cloud sandbox on every PR without any manual intervention.
+Inspect the actual diff and check for rejected operations before treating the task as complete.

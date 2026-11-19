@@ -19,11 +19,11 @@ For untrusted repositories, unattended execution, or high-impact tasks, run the 
 
 ## Capability Tiers
 
-| Tier | Capability | fx behavior | Approval required | Typical tasks |
-| :--- | :--------- | :---------- | :---------------- | :------------ |
-| **0** | Observe | Request analysis only; do not authorize mutations | No workspace mutation | Review, architecture analysis, local research |
-| **1** | Edit | Permit the requested workspace changes through fx's permission flow | Yes | Refactoring, documentation, mechanical fixes |
-| **2** | Execute | Permit required commands or external side effects through fx's permission flow | Yes (High Risk) | Tests, builds, dependency changes, scripted automation |
+| Tier  | Capability | fx behavior                                                                    | Approval required     | Typical tasks                                          |
+| :---- | :--------- | :----------------------------------------------------------------------------- | :-------------------- | :----------------------------------------------------- |
+| **0** | Observe    | Request analysis only; do not authorize mutations                              | No workspace mutation | Review, architecture analysis, local research          |
+| **1** | Edit       | Permit the requested workspace changes through fx's permission flow            | Yes                   | Refactoring, documentation, mechanical fixes           |
+| **2** | Execute    | Permit required commands or external side effects through fx's permission flow | Yes (High Risk)       | Tests, builds, dependency changes, scripted automation |
 
 ## Implementation Workflow
 
@@ -45,17 +45,17 @@ Do not treat fx's native permission reviewer as blanket authorization for unrela
 
 ### 3. Execute a single request
 
-Use `fx ask` for delegated, non-interactive work:
+Use [`fx ask`](https://fx.sh/docs/using-fx/fx-ask) for one non-interactive request. Verify the effective [permission mode and rules](https://fx.sh/docs/configure-fx/permissions) before passing the task. If those rules cannot enforce read-only access or the required scope, use external containment or stop. The examples choose ask mode explicitly. Unattended runs must already have the needed operations approved. Treat permission failures as blockers.
 
 ```bash
 # Tier 0: analysis only
-fx ask "Review this repository and report the requested findings. Do not modify files or run commands that create side effects."
+fx ask --permission-mode ask "Review this repository and report the requested findings. Do not modify files or run commands that create side effects."
 
 # Tier 1: bounded workspace editing
-fx ask "Implement the requested workspace-only change. Do not run tests, package managers, Git commands, or other external side effects."
+fx ask --permission-mode ask "Implement the requested workspace-only change. Do not run tests, package managers, Git commands, or other external side effects."
 
 # Tier 2: controlled execution
-fx ask "Implement the requested change, run only the smallest relevant validation commands, and report every command and result. Avoid unrelated side effects."
+fx ask --permission-mode ask "Implement the requested change, run only the smallest relevant validation commands, and report every command and result. Avoid unrelated side effects."
 ```
 
 Prefer one narrowly scoped request per `fx ask` invocation. Split unrelated work into separate invocations rather than granting one session an unnecessarily broad mandate.
@@ -99,7 +99,8 @@ Use `/skills list` to inspect discovered skills and `/skills path` to see the ma
 
 Before relying on fx in automation:
 
-- Confirm authentication/configuration with the repository's documented `fx login` or `fx setup` flow.
+- Check `fx --version` and `fx ask --help` against the [CLI reference](https://fx.sh/docs/using-fx/cli). Verify the user's authentication and native connection.
+- Use `fx models` to discover model IDs. Preserve the user's native selection or pass verified values with `fx ask --model "<model-id>" --provider "<connection>"`. If routing through AI Gateway, confirm its allowed inference providers. Use a verified `--provider-order` with `--provider-strict` when fallback outside that route is prohibited.
 - Use `fx status` and `fx doctor` when validating local configuration or integrations.
 - Review persistent permission rules before unattended runs.
 - Treat fx as experimental software and pin/verify the version used in production-like automation.

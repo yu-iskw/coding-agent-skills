@@ -1,158 +1,32 @@
 ---
 name: claude-code-cli
-description: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, auto, or bypassPermissions) based on the task type.
+description: Delegates one task to Claude Code in print mode. Uses native permission modes and tool restrictions for scoped code review, editing, or validation.
 ---
 
-# executing-claude
+# Execute one task with Claude Code
 
-## Purpose
+## Preflight
 
-Use this skill to perform coding, research, or automation tasks using the `claude` CLI. It maps requests to Claude's native permission modes to balance automation with security.
+- Check `claude --version` and `claude --help` against the [Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference). Use `claude auth status --text` where supported and confirm the actual provider and workspace configuration.
+- Leave the model unset for the user's configured default. Use `--model "<confirmed-alias-or-id>"` only for a verified model. A model alias can resolve differently depending on provider or account.
+- Review loaded settings, hooks, plugins, and MCP servers before launching in a trusted workspace. Claude's [Bash sandbox](https://code.claude.com/docs/en/sandboxing) is configured in settings. Verify it independently when the task requires shell isolation.
 
-## Permission Tiers
+## Execute
 
-| Tier    | Claude Mode         | Capability                                                    | Approval Required                  | Plan Requirement                           | Typical Tasks                             |
-| :------ | :------------------ | :------------------------------------------------------------ | :--------------------------------- | :----------------------------------------- | :---------------------------------------- |
-| **0**   | `plan`              | Read-only access, analysis, research.                         | **No**                             | Any                                        | Code review, audits, web research.        |
-| **1**   | `acceptEdits`       | Auto-approves file edits; prompts for shell.                  | **Yes**                            | Any                                        | Refactoring, documentation, lint fixes.   |
-| **1.5** | `auto`              | All actions; background classifier blocks risky operations.   | **No (classifier handles it)**     | Team / Enterprise / API; Sonnet 4.6+ only  | Long-running tasks, reducing prompt fatigue. |
-| **2**   | `bypassPermissions` | Auto-approves ALL tools (edits + shell); respects deny list.  | **Yes (High Risk)**                | Any                                        | CI/CD, complex builds, automated testing. |
-| **–**   | `delegate`          | Subagents inherit parent's permission level.                  | **Varies**                         | Any                                        | Multi-agent / parallel task workflows.    |
-
-## Implementation Workflow
-
-### 1. Budget Verification (Optional but Recommended)
-
-Before initiating complex or long-running tasks, verify the remaining token/cost budget to avoid suspension.
-
-- **Tools**: Use `ccusage daily --json` to check current consumption.
-- **Constraints**: If the daily cost is approaching the limit, alert the user or use the `--max-budget-usd` flag for the session.
-
-### 2. Analyze & Classify
-
-Analyze the user's intent to determine the required permission tier.
-
-- **Tier 0 (Plan)**: Does the task only involve reading code or searching for information?
-- **Tier 1 (Accept Edits)**: Does the task involve modifying files but no command execution?
-- **Tier 1.5 (Auto)**: Is the task long-running and would interactive prompting be disruptive? Does the user have a Team/Enterprise plan and use Sonnet 4.6 or Opus 4.6? If yes, prefer `auto` over `bypassPermissions` — the classifier will block risky operations automatically.
-- **Tier 2 (Bypass Permissions)**: Does the task require running tests, build scripts, or managing dependencies autonomously, and `auto` mode is unavailable or insufficient?
-
-### 2. Approval Protocol
-
-If the task maps to **Tier 1** or **Tier 2**, you **MUST** obtain user approval before executing the `claude` command.
-
-Use the `AskQuestion` tool to confirm:
-
-> "I've detected that this task requires [Accept Edits/Bypass Permissions] permissions to [modify files/run shell commands]. OK to proceed?"
-
-### 3. Execution
-
-Execute `claude` using the mode determined by the tier. Use `--max-budget-usd` for non-interactive tasks where cost control is critical.
+For read-only analysis, combine plan mode with a restricted built-in tool list and explicitly deny MCP tools. For authorized file changes, use an edit-only tool list.
 
 ```bash
-# Tier 0 (Plan + sandbox — read-only, OS-level isolation, shell blocked)
-claude -p "<prompt>" --permission-mode plan --sandbox \
-  --disallowedTools Bash --max-budget-usd 1.0
+claude --print --permission-mode plan --tools "Read,Glob,Grep" \
+  --disallowedTools "mcp__*" -- "Review the parser implementation."
 
-# Tier 1 (Accept Edits + sandbox — file writes allowed, shell gated, OS-level isolation)
-claude -p "<prompt>" --permission-mode acceptEdits --sandbox
-
-# Tier 1.5 (Auto — all actions; background classifier blocks risky operations)
-# Requires Team/Enterprise/API plan and Sonnet 4.6 or Opus 4.6
-claude -p "<prompt>" --permission-mode auto
-
-# Tier 2 (Bypass Permissions — sandbox omitted; must run shell commands freely)
-claude -p "<prompt>" --permission-mode bypassPermissions
+claude --print --permission-mode acceptEdits --tools "Read,Glob,Grep,Edit,Write" \
+  --disallowedTools "mcp__*" -- "Correct the usage example in README.md."
 ```
 
-**Security Rules:**
+Plan and tool controls apply to agent tools. Use a sandbox or isolated workspace when the task requires an enforceable boundary around the whole process, including hooks or other loaded code. Where supported, `--safe-mode` can disable customizations when they are outside task scope.
 
-- **ALWAYS** pass `--sandbox` for Tier 0 and Tier 1. Skip only when OS prerequisites are unavailable (Linux requires `bubblewrap` + `socat`: `sudo apt-get install bubblewrap socat`; macOS uses built-in Seatbelt).
-- For Tier 0, also pass `--disallowedTools Bash` to block shell execution at the tool layer.
-- **NEVER** use `--permission-mode bypassPermissions` without explicit confirmation of the risks.
-- **ALWAYS** use the most restrictive mode possible (prefer `plan`).
-- If you are unsure, default to `plan` and escalate only if `claude` reports it cannot complete the task.
-- **Prefer `auto` over `bypassPermissions`** when eligibility conditions are met — the classifier provides safety guardrails without requiring manual approval for every action.
-- **`auto` mode classifier behavior**: The classifier runs on Sonnet 4.6 regardless of the main session model, and its calls count toward token usage. Extra cost is incurred mainly by shell commands and network operations; read-only actions and local file edits do not trigger classifier calls. If the classifier blocks an action, `claude` pauses and asks the user before proceeding.
-- **`auto` mode is not available on Haiku or claude-3 models.** If using these models, fall back to Tier 1 (`acceptEdits`) or Tier 2 (`bypassPermissions`) as appropriate.
-- **`--permission-mode bypassPermissions` vs `--dangerously-skip-permissions`**: `bypassPermissions` still respects explicit deny rules in `settings.json`. The `--dangerously-skip-permissions` flag bypasses ALL checks including the deny list — never use it outside a fully isolated container.
+For authorized validation commands, prefer running them in the calling environment. If Claude must run them, confirm that its Bash sandbox and permission rules enforce the command scope, or use an authorized interactive session for approvals. If a print-mode run cannot obtain a required approval, report it and stop. Preserve native safeguards.
 
-**What the `auto` classifier blocks by default:**
-- Downloading and executing code (`curl | bash`, scripts from cloned repos)
-- Sending sensitive data to external endpoints
-- Production deploys and migrations
-- Mass deletion on cloud storage
-- Granting IAM or repo permissions
-- Modifying shared infrastructure
-- Destructively destroying files that existed before the session started
-- Force-pushing or pushing directly to `main`
+Use `--output-format json` when structured results are useful. Check the exit status, output and any permission denials, then inspect changes and verify the result. See [usage examples](references/usage-examples.md).
 
-**What the `auto` classifier allows by default:**
-- Local file operations in the working directory
-- Installing dependencies from lock files
-- Reading `.env` and sending credentials to matching APIs
-- Read-only HTTP requests
-- Pushing to the branch you started on or one `claude` created
-
-## Configuration
-
-This skill leverages native `claude` CLI flags to enforce the permission tiers.
-
-### Model Selection
-
-The default model depends on your Claude plan:
-
-| Plan | Default Model | Shorthand |
-| :--- | :------------ | :-------- |
-| Max / Team / Enterprise | `claude-opus-4-6` | `opus` |
-| Pro | `claude-sonnet-4-6` | `sonnet` |
-
-Override at invocation time with `--model <shorthand-or-id>`, or change mid-session with `/model <shorthand>`:
-
-```bash
-claude --model sonnet -p "<prompt>" --permission-mode plan
-claude --model opus   -p "<prompt>" --permission-mode acceptEdits
-```
-
-Available model IDs: `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4-5`.
-
-## Cloud Agent Handoff
-
-Claude Code offers two remote execution modes beyond local CLI.
-
-### Cloud Execution *(research preview — Pro / Max / Team / Enterprise)*
-
-Tasks run on Anthropic-managed VMs with pre-installed runtimes. Code is cloned to an isolated container; no local machine required.
-
-```bash
-# Kick off a cloud task
-claude --remote "<task>"
-
-# Monitor all running cloud tasks (in any interactive session)
-/tasks
-```
-
-> **Security note:** Cloud tasks run with `--dangerously-skip-permissions` by default.
-> Only committed repo hooks and a `setup.sh` script apply; user-level `settings.json` is ignored.
-> Use for well-defined, async tasks where local oversight is not required.
-
-### Remote Control *(GA — Feb 2026)*
-
-Code stays on your local machine. Remote Control synchronizes access so you can monitor and steer the same agent session from another device (phone, tablet, web at `claude.ai/code`).
-
-```bash
-# Pull a web or mobile session back to your terminal
-claude --teleport
-claude --teleport <session-id>
-```
-
-| | Cloud Execution | Remote Control |
-| :--- | :--- | :--- |
-| **Where code runs** | Anthropic VM | Your local machine |
-| **Parallelism** | Multiple tasks | Single session |
-| **Offline continuation** | Yes | No (requires local machine) |
-| **Permissions** | `dangerously-skip-permissions` | Respects local settings |
-
-## Examples
-
-Refer to [references/usage-examples.md](./references/usage-examples.md) for concrete scenarios.
+For an explicitly requested hosted run or control of an existing session, use the native [Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web) or [Remote Control](https://code.claude.com/docs/en/remote-control) workflow.

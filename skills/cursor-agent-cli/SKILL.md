@@ -1,120 +1,27 @@
 ---
 name: cursor-agent-cli
-description: Executes tasks using the Cursor Agent CLI (`cursor-agent`). Provides structured modes for planning, Q&A, and full automation with safety guardrails.
+description: Delegates one task to Cursor CLI in print mode. Uses Ask or Plan mode for analysis and native permissions and sandbox controls for authorized edits and command execution.
 ---
 
-# executing-cursor-agent
+# Execute one task with Cursor CLI
 
-## Purpose
+## Preflight
 
-Use this skill to perform coding, research, or automation tasks using the `cursor-agent` CLI. It leverages Cursor's native execution modes to balance autonomy with safety.
+- Find the installed Cursor binary. Current [Cursor CLI documentation](https://cursor.com/docs/cli/overview) uses `agent`. If the installation exposes `cursor-agent`, use that binary only when its `--version` and `--help` confirm the same options. Review [CLI parameters](https://cursor.com/docs/cli/reference/parameters) and [headless behavior](https://cursor.com/docs/cli/headless).
+- Use `agent status` where supported to check authentication. Preserve the native model selection unless the task specifies an eligible model. Check `agent --list-models` before passing `--model "<confirmed-model>"`. Confirm the effective provider and account when the task restricts them.
+- Review project trust, the effective [permission rules](https://cursor.com/docs/cli/reference/permissions), sandbox and configured integrations. In print mode, operations already allowed by policy can run, including workspace edits in default agent mode.
 
-## Execution Modes
-
-| Mode        | Flag          | Capability                                  | Approval Required | Typical Tasks                             |
-| :---------- | :------------ | :------------------------------------------ | :---------------- | :---------------------------------------- |
-| **Plan**    | `--mode plan` | Read-only analysis, research, and planning. | **No**            | Code audits, architectural planning.      |
-| **Ask**     | `--mode ask`  | Q&A style for explanations and questions.   | **No**            | Explaining code, searching documentation. |
-| **Default** | (none)        | Full access (edits + shell execution).      | **Yes**           | Feature implementation, bug fixes.        |
-
-## Implementation Workflow
-
-### 1. Analyze & Classify
-
-Analyze the user's intent to determine the appropriate mode.
-
-- **Plan Mode**: Does the task only involve analyzing the codebase or proposing a plan without making changes?
-- **Ask Mode**: Is the user asking a specific question or seeking an explanation?
-- **Default Mode**: Does the task require modifying files or running shell commands?
-
-### 2. Security Protocol
-
-If the task requires **Default Mode**, you **MUST** obtain user approval before execution, as `cursor-agent` has full access to tools like `bash` and `write`.
-
-Use the `AskQuestion` tool to confirm:
-
-> "I've detected that this task requires full agent permissions to modify files and execute commands. OK to proceed with `cursor-agent`?"
-
-**Built-in security posture (no flags required):**
-
-- **Sandbox on by default:** OS-level sandboxing is enabled automatically on macOS, Linux, and Windows since early 2026. No `--sandbox` flag is needed.
-- **Network restricted by default:** Outbound access is limited to GitHub, select web-search providers, and explicitly user-approved links. All other outbound requests are blocked.
-- **MCP approval required:** Every third-party MCP connection triggers an explicit user-approval prompt. Always inspect available tools with `cursor-agent mcp list-tools <id>` before approving any MCP server.
-
-### 3. Execution
-
-Execute `cursor-agent` using the determined mode. Use `--print` for non-interactive output suitable for the calling agent.
+## Execute
 
 ```bash
-# Plan Mode
-cursor-agent --print --mode plan "<prompt>"
-
-# Ask Mode
-cursor-agent --print --mode ask "<prompt>"
-
-# Default Mode (requires approval)
-cursor-agent --print "<prompt>"
+agent --print --mode ask --sandbox enabled "Explain how the parser handles invalid input."
+agent --print --mode plan --sandbox enabled "Propose a migration plan for src/parser.py."
 ```
 
-### 4. Advanced Commands
+Use Ask for read-only exploration and Plan for analysis and planning. Confirm effective tool and integration restrictions where shell, network access, or reads outside scope must be blocked.
 
-#### Session Management
+For changes, use default agent mode only with the user's authorization and effective write and command rules that fit the task. Print mode cannot pause for approvals. When an operation requires one, report it and continue only through the native approval workflow. Keep `--force`, `--yolo`, trust bypasses, and blanket MCP approval out of routine delegation.
 
-- `cursor-agent ls`: List previous conversations.
-- `cursor-agent --resume [thread-id]`: Resume a prior conversation by ID. Omit the ID to resume the most recent session.
+Capture output with `--output-format` if needed. Check the exit status and result, then inspect the diff and validation independently. See [usage examples](references/usage-examples.md).
 
-#### Cloud Handoff
-
-Prefix any interactive message with `&` to push the current conversation to a background Cloud Agent:
-
-```text
-& <follow-up prompt>
-```
-
-The agent continues running asynchronously. Pick up the conversation at `cursor.com/agents` on the web or mobile app.
-
-#### Context Management
-
-- `@<file-or-folder>`: Select specific files or folders to include in the agent's context.
-- `/compress`: Free up context window space by summarizing prior turns.
-
-#### MCP Management
-
-- `cursor-agent mcp list`: View configured MCP servers.
-- `cursor-agent mcp list-tools <id>`: Inspect tools available in a specific MCP.
-- `/mcp list` (interactive mode): Open an interactive menu to browse, enable, and configure MCP servers.
-
-#### Rule Generation
-
-- `cursor-agent generate-rule`: Create new `.cursorrules` or project-specific rules.
-
-## Configuration
-
-This skill uses native `cursor-agent` flags. Ensure `CURSOR_API_KEY` is set in the environment if required, or run `cursor-agent login` first.
-
-### Model Selection
-
-Cursor supports models from multiple providers. The active model depends on your subscription tier (defaults to Cursor's proprietary **Composer 2 Fast** or GPT-5.3-Codex on most paid plans). Switch models at any time via the in-session model picker, or set `CURSOR_MODEL` in the environment:
-
-```bash
-CURSOR_MODEL=claude-sonnet-4-6 cursor-agent --print "<prompt>"
-```
-
-Available providers: OpenAI (GPT-5.x), Anthropic (Claude Opus/Sonnet/Haiku 4.x), Google (Gemini 2.5/3), Cursor (Composer 2 Fast), DeepSeek, and local models.
-
-## Automations *(Cloud — GA Mar 2026)*
-
-**Cursor Automations** are always-on cloud agents triggered by external events. They run in an isolated cloud sandbox with your configured MCPs, automatically verify their output, and post results (e.g., comments, PRs).
-
-**Supported triggers:** GitHub PR opened/updated, Slack message, Linear issue created, PagerDuty alert, cron schedule, webhook.
-
-Configure automations at `cursor.com/settings/automations`.
-
-**Example automation uses:**
-- Auto-review every PR for security issues and post a summary comment
-- Triage Linear issues and assign labels based on content
-- On PagerDuty alert: investigate recent commits, identify likely culprit, open a fix PR
-
-## Examples
-
-Refer to [references/usage-examples.md](./references/usage-examples.md) for concrete scenarios.
+For hosted execution, use the separate [Cursor Cloud Agents workflow](https://cursor.com/docs/cloud-agent) after confirming the destination and repository access.

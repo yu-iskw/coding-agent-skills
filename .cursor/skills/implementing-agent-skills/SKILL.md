@@ -80,7 +80,7 @@ Once the tool is identified, tailor the Agent Skill implementation accordingly:
 
 - **Antigravity**:
   - Keep skill content portable when possible.
-  - For execution-oriented skills, model safety using Antigravity's current permission resources rather than retired Gemini CLI approval modes.
+  - For execution-oriented skills, model safety using Antigravity's current permission resources. Gemini CLI has a separate permission model.
 
 ## 4. Standards & Templates
 
@@ -119,5 +119,5 @@ Select the template that best matches the skill's purpose:
 | [library-upgrade.md](assets/templates/library-upgrade.md)   | Safe, multi-step dependency upgrades.            |
 | [code-review.md](assets/templates/code-review.md)           | Reviewing code against project standards.        |
 | [security-audit.md](assets/templates/security-audit.md)     | Systematic vulnerability scanning and reporting. |
-| [fixer-loop.md](assets/templates/fixer-loop.md)             | Autonomous "test-analyze-fix" loops (TDD/Lint). |
+| [fixer-loop.md](assets/templates/fixer-loop.md)             | Autonomous "test-analyze-fix" loops (TDD/Lint).  |
 | [docs-sync.md](assets/templates/docs-sync.md)               | Keeping documentation in sync with source code.  |

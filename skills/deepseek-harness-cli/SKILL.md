@@ -19,7 +19,7 @@ Each headless invocation runs **one task** and exits. There is no interactive fo
 
 For untrusted repositories, unattended execution, or high-impact tasks, run the entire `dsh` process inside an external containment boundary such as a container, VM, micro-VM, or policy-controlled sandbox. Expose only the required workspace paths, credentials, and network access.
 
-Harness does not offer a single flag equivalent to Pi's `--tools` allowlist. Capability boundaries are expressed through **prompt scope**, **permission presets** (for example the base-backed default `workspace-write`), optional `DSH_PERMISSION_MODE`, and profile or `cordis.patch.yml` overlays. Inspect effective configuration with `dsh --profile headless --dump-config` when tightening automation.
+Harness does not offer a single flag equivalent to Pi's `--tools` allowlist. Use a verified permission preset, profile or `cordis.patch.yml` overlay, and external containment as needed. Scope the prompt to the same boundary. Inspect effective configuration with `dsh --profile headless --dump-config` when tightening automation.
 
 ## Capability Tiers
 
@@ -49,26 +49,26 @@ Obtain explicit user approval before Tier 1 or Tier 2 execution when the calling
 
 Do not treat Harness permission presets or approval UI as blanket authorization for unrelated side effects.
 
-### 3. Pre-flight
+### 3. Preflight
 
-Before Tier 1 or Tier 2, or before long Tier 0 runs:
+Before any task:
 
-1. Confirm the credential your profile expects (for example `DEEPSEEK_API_KEY` for `deepseek-official`, or `OPENROUTER_API_KEY` for the pi-ai `openrouter` route—see [references/cli-reference.md](./references/cli-reference.md)).
-2. Confirm `dsh` is available (`command -v dsh`) or pin a version with `npx @deepseek-ai/dsh@<version>` (details in cli-reference).
-3. For orchestrated workflows, align with repository resource stewardship; Harness does not expose a universal "remaining quota" CLI—plan task size accordingly.
+1. Check `dsh --version` and `dsh --profile headless --help` against the [upstream CLI help](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cli-help.md).
+2. Verify the credential route, provider and model in the effective profile. Preserve native selection when accepted. Inspect `dsh --profile headless --dump-config` locally and keep any sensitive output out of task prompts and reports. See [profile configuration](references/cli-reference.md).
+3. Verify a named preset or external containment that enforces the task's file, command, and integration scope. The default may allow writes. Use the installed flag syntax for the verified preset and policy.
 
 ### 4. Execute a single headless task
 
 Use the `headless` profile for delegated, non-interactive work. The invoking directory is the default workspace root. Prefer one narrowly scoped task per invocation; tier-specific prompt templates are in [references/usage-examples.md](./references/usage-examples.md).
 
 ```bash
-dsh --profile headless "<scoped task>"
+dsh --profile headless --permission-mode "$confirmed_preset" --approval-policy never "<scoped task>"
 ```
 
-**Orchestrator options:**
+**Optional output and follow-up:**
 
-- `dsh --profile headless --json "<task>"` — newline-delimited JSON events on stdout for supervisors (stderr retains `dsh:` diagnostics).
-- `dsh --profile headless --session-id <id> "<task>"` — continue a persisted session only when cwd, preset, and adoption rules match; see [references/cli-reference.md](./references/cli-reference.md).
+- `--json` — newline-delimited JSON events on stdout for supervisors (stderr retains `dsh:` diagnostics).
+- `--session-id <id>` — continue a persisted session only when cwd, preset, and adoption rules match; see [references/cli-reference.md](./references/cli-reference.md).
 
 On success, exit code is `0` and the final assistant text is printed on stdout (default mode). Non-zero exit indicates failure or incomplete turn; check stderr for `dsh:` messages and optional reasoning under `dsh: reasoning:`.
 
@@ -97,7 +97,7 @@ Subsystem reference: [docs/subsystems/skills.md](https://github.com/deepseek-ai/
 
 ## Non-Goals
 
-- Do not map retired Gemini CLI approval modes or Antigravity permission resources onto `dsh`.
+- Use Harness permission presets and controls for `dsh`.
 - Do not use `sdk` or `acp` profiles as the primary delegation path here; use headless for one-shot workers ([references/cli-reference.md](./references/cli-reference.md) for ACP notes).
 
 ## Security Rules

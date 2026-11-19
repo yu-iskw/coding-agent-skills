@@ -1,10 +1,11 @@
 # Codex Research
 
+For maintained invocation examples and permission guidance, see the [Codex CLI skill](../../skills/codex-cli/SKILL.md). The research notes below originate from March 2026.
+
 Executive summary (as of March 2026)
 • Codex CLI (from OpenAI) is a local coding agent that can read, edit, and run code in your repo, with a configurable sandbox + approval model to control autonomy.
 • **The CLI has been rewritten in Rust (v0.106.0+).** The TypeScript implementation is now legacy. Install the current version via `npm i -g @openai/codex` or `brew install --cask codex`.
-• **Approval mode names changed:** `suggest` (read-only/propose), `auto-edit` (file edits auto-approved), `full-auto` (edits + shell in sandbox). Flags: `--suggest`, `--auto-edit`, `--full-auto`.
-• **Default model:** `o4-mini` (the `gpt-5.2-codex` value in older research was from an early draft and is now outdated).
+• **Separate approval and sandbox settings:** Use the installed CLI help to confirm current options. Keep the user’s configured model unless the task requires a verified override.
 • **Project guidance:** Use `AGENTS.md` at the repo root (or `~/.codex/AGENTS.md` globally) to define project standards — equivalent to `CLAUDE.md` in Claude Code.
 • The most “advanced” power comes from combining: 1. non-interactive automation (codex exec streaming stdout/JSONL), 2. profiles + layered config (user + project + overrides), 3. MCP integrations (bring in third-party tools/context safely), 4. rules/execpolicy (control which commands can run “outside the sandbox”), 5. skills (packaged, reusable workflows).
 • Below you’ll find 10 advanced use cases and a best-practice configuration playbook (security- and team-friendly), grounded in the official docs and the repo’s published defaults.
@@ -35,7 +36,7 @@ Comparison table (what to combine for each use case)
 ## Advanced use case Key Codex features Most relevant settings / controls
 
 1 CI-style “agent runner” (deterministic automation) codex exec (stdout/JSONL), resume sandbox*mode=read-only, approval_policy=never, rules/allow-lists ￼
-2 Safe refactor factory (many edits, constrained execution) interactive TUI + approvals sandbox_mode=workspace-write, approval_policy=untrusted/on-request ￼
+2 Safe refactor factory (many edits, constrained execution) interactive TUI + approvals sandbox_mode=workspace-write, approval_policy=on-request ￼
 3 Cross-repo coordinated change (monorepo-ish) extra write dirs --add-dir (grant additional directories) ￼
 4 Governed “outside-sandbox” command control rules + execpolicy tooling .rules + codex execpolicy ￼
 5 Integrate 3rd-party tools/context (tickets, docs, SCM) MCP [mcp_servers.*], tool allow/deny lists, OAuth login ￼
@@ -55,7 +56,7 @@ Goal: run Codex in pipelines with minimal nondeterminism and zero risky side eff
 
 Example pattern:
 
-codex exec --sandbox read-only --ask-for-approval never \
+codex --ask-for-approval never exec --sandbox read-only \
  "Review the diff; output a markdown checklist of issues + suggested patches."
 
 Edge case: If you want Codex to propose diffs, do it in workspace-write but keep approvals on.
@@ -66,7 +67,7 @@ Edge case: If you want Codex to propose diffs, do it in workspace-write but keep
 
 Goal: let Codex rewrite lots of files, but gate command execution and network.
 
-Use workspace-write + a stricter approval policy like untrusted / on-request. ￼
+Use workspace-write + an approval policy such as on-request. ￼
 This combination is explicitly recommended as a common “auto edit, but ask before untrusted commands” mode. ￼
 
 ⸻
