@@ -1,7 +1,7 @@
 {
   "name": "coding-agent-skills",
   "version": "0.1.0",
-  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, Antigravity, and DeepSeek Harness CLIs.",
+  "description": "Reusable skills for choosing a coding agent and model with project-specific routing rules and delegating through native CLI adapters.",
   "author": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
@@ -12,7 +12,7 @@
   "keywords": [
     "coding-agent",
     "skills",
-    "orchestration",
+    "routing",
     "claude-code",
     "codex",
     "cursor",
@@ -25,12 +25,12 @@
   ],
   "skills": "./skills/",
   "displayName": "Coding Agent Skills",
-  "shortDescription": "Reusable skills for orchestrating parallel AI agent workflows.",
-  "longDescription": "Coding Agent Skills transforms your repository into an Agent-Ready Environment by providing deterministic, reusable skills that enable higher autonomy, precision, and parallelism. Includes skills for orchestrating parallel tasks and executing work via Claude Code, Codex CLI, Cursor Agent CLI, GitHub Copilot CLI, Pi, Vercel Labs fx, Google Antigravity CLI, and DeepSeek Harness (dsh).",
+  "shortDescription": "Choose and delegate to a coding agent.",
+  "longDescription": "Configure which coding agent, provider, and model fit your tasks. Use the selected native CLI adapter for Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, Antigravity, or DeepSeek Harness.",
   "developerName": "yu-iskw",
   "category": "productivity",
   "websiteURL": "https://github.com/yu-iskw/coding-agent-skills",
-  "defaultPrompt": "Use the orchestrating-parallel-tasks skill to break this task into parallel sub-tasks.",
+  "defaultPrompt": "Use setup-agent-routing to configure coding-agent preferences for this project.",
   "brandColor": "#6366f1",
   "logo": ""
 }
