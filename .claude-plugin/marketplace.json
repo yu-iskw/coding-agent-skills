@@ -2,19 +2,19 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "coding-agent-skills",
   "version": "0.1.0",
-  "description": "A marketplace of reusable coding agent skills for orchestrating parallel tasks and delegating work to multiple AI CLI tools.",
+  "description": "A marketplace of reusable coding-agent routing and CLI delegation skills.",
   "owner": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
   },
   "metadata": {
-    "description": "Reusable agent skills for orchestrating parallel tasks and delegating work across Claude Code, Codex, Cursor, Copilot, Pi, fx, Antigravity, and DeepSeek Harness CLIs."
+    "description": "Reusable skills for choosing a coding agent and model with project-specific routing rules and delegating through native CLI adapters."
   },
   "plugins": [
     {
       "name": "coding-agent-skills",
       "version": "0.1.0",
-      "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, fx, Antigravity, and DeepSeek Harness CLIs.",
+      "description": "Reusable skills for choosing a coding agent and model with project-specific routing rules and delegating through native CLI adapters.",
       "author": {
         "name": "yu-iskw",
         "url": "https://github.com/yu-iskw"
@@ -22,8 +22,7 @@
       "source": "./",
       "category": "productivity",
       "keywords": [
-        "orchestration",
-        "parallel-tasks",
+        "routing",
         "claude-code",
         "codex",
         "cursor",

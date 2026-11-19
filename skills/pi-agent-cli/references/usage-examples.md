@@ -56,16 +56,16 @@ pi --tools read,grep,find,ls,edit,write,bash \
 Use `--skill` to load a specific Agent Skill explicitly:
 
 ```bash
-pi --skill ./skills/orchestrating-parallel-tasks \
+pi --skill ./skills/codex-cli \
   --tools read,grep,find,ls \
-  -p "Decompose this implementation into independent work items."
+  -p "Summarize the documented Codex permission tiers from the loaded skill without invoking Codex."
 ```
 
 Automatic skill discovery can be disabled while keeping explicitly supplied skills:
 
 ```bash
 pi --no-skills \
-  --skill ./skills/orchestrating-parallel-tasks \
+  --skill ./skills/codex-cli \
   --tools read,grep,find,ls \
   -p "Plan this migration."
 ```

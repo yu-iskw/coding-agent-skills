@@ -1,49 +1,31 @@
-# Coding Agent Skills: The Orchestration Framework for Industrial-Grade AI Workflows
+# Coding Agent Skills
 
-Standard coding agents are powerful but often hit a **"Complexity Ceiling"** in long-horizon tasks. As conversations grow, context decays, hallucinations increase, and reliability drops.
+Configure which coding agent, provider, and model to use for a task. The plugin ships a setup skill, a routing skill, and CLI adapters that preserve each tool's native permission and approval workflow.
 
-**Coding Agent Skills** transform your repository from a collection of code into an **Agent-Ready Environment**. By codifying workflows into deterministic, reusable skills, you enable agents to work with higher autonomy, precision, and parallelism.
+## Configure agent routing
 
-## Why Coding Agent Skills?
+1. Ask your host to use `setup-agent-routing`. In Claude Code, run `/coding-agent-skills:setup-agent-routing`. Choose the tools and models you can access, then review the proposed `.agents/coding-agent-routing.yaml` in your project.
+2. Ask `route-coding-task` for a dry run, for example, “Which configured agent would review this diff?” It shows the selected target, model, and matching rule.
+3. Request delegation when you want the selected adapter to run the task. You can also invoke any CLI adapter directly.
 
-Standard agents operate in a single-session vacuum. Coding Agent Skills provide:
+The policy uses your own task descriptions as ordered rules. The first match wins, and you can define a default for unmatched tasks. You can choose a different target for an individual request. Keep credentials in each CLI's native authentication flow. For the policy format and a working example, see [Route one coding task](skills/route-coding-task/SKILL.md#policy-format).
 
-- **Orchestration**: Decouple planning from execution for complex tasks.
-- **Reliability**: Replace vague prompts with structured, executable SOPs.
-- **Efficiency**: Parallelize work that would take a single agent hours to complete.
-
-## Key Advantages for Advanced Users
-
-1.  **Multi-Agent Parallelism**: Break monolithic tasks into sub-tasks and execute them simultaneously across multiple agent instances.
-2.  **Deterministic SOPs**: Standardize complex workflows (e.g., security audits, library upgrades) as executable SOPs that ensure zero steps are skipped.
-3.  **Context Hygiene**: Use progressive disclosure to feed agents only the data they need, maintaining high reasoning quality.
-4.  **Autonomous Fixer Loops**: Encapsulate `Test -> Analyze -> Fix` loops so agents self-correct without human intervention.
-5.  **Platform Portability**: Write skills once; run them across **Claude Code**, **Codex**, **Cursor**, **GitHub Copilot CLI**, **Pi**, **fx**, **Google Antigravity CLI**, and **DeepSeek Harness** (`dsh`).
-6.  **Safety Governance**: Define granular permission modes per skill to manage risk in autonomous executions.
-7.  **Institutional Memory**: Codify "Tribal Knowledge" into skills so every agent (and human) operates at an expert level.
-8.  **Sub-Agent Specialization**: Spin up micro-personas (e.g., "SQL Optimizer") for domain-specific precision.
-9.  **Headless CI/CD**: Trigger skills in pipelines for automated PR validation and structured reporting.
-10. **Low-Code Customization**: Add new capabilities by simply adding a `SKILL.md` file—no extension development required.
-
-## Building an Agent-Ready Repository
-
-An Agent-Ready repository isn't just about good code; it's about **explicit intent**. By providing `SKILL.md` files, you give AI agents a clear "map" of how to interact with your codebase, what tools to use, and how to validate their own work.
+When upgrading from a version with the parallel orchestration skills, update prompts that referenced those skills or the coding-orchestrator subagent. Use `route-coding-task` when you want to select a tool and delegate one task.
 
 ## Available Skills
 
-This repository includes the following coding agent skills:
-
 <!-- START-SKILLS -->
 
-- **[orchestrating-parallel-tasks](skills/orchestrating-parallel-tasks/)**: Decomposes complex or large-scale requirements into discrete, mutually exclusive sub-tasks that can be executed in parallel by multiple agents. Use when a task is described as an "epic", spans multiple architectural layers, or would benefit from concurrent development to reduce time-to-completion.
-- **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, or bypassPermissions) based on the task type.
-- **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Read-Only, Editor, or Autonomous) based on the user's request and handles security approvals.
+- **[antigravity-cli](skills/antigravity-cli/)**: Executes coding, review, research, and automation tasks using Google Antigravity CLI (`agy`). Uses Antigravity's native fine-grained allow/ask/deny permissions instead of Gemini CLI approval modes.
+- **[claude-code-cli](skills/claude-code-cli/)**: Executes tasks using the Claude Code CLI (`claude`). Automatically determines the safest permission mode (plan, acceptEdits, auto, or bypassPermissions) based on the task type.
+- **[codex-cli](skills/codex-cli/)**: Executes tasks using the Codex CLI (`codex`). Automatically determines the least privilege required (Suggest, Auto-Edit, or Full-Auto) based on the user's request and handles security approvals.
 - **[copilot-cli](skills/copilot-cli/)**: Executes tasks using the GitHub Copilot CLI (`copilot`). Automatically determines the safest permission mode (plan, editor, or autopilot) based on the task type.
-- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI with structured planning, Q&A, and automation modes.
-- **[deepseek-harness-cli](skills/deepseek-harness-cli/)**: Executes tasks using DeepSeek Harness CLI (`dsh`) via the headless profile, with Harness permission presets and Agent Skills discovery under `.dsh/skills` and `.agents/skills`. Harness is in developer preview.
-- **[pi-agent-cli](skills/pi-agent-cli/)**: Executes tasks using the Pi coding agent CLI (`pi`) with explicit tool allowlists and least-privilege capability tiers. Pi also natively implements the Agent Skills standard.
-- **[fx-agent-cli](skills/fx-agent-cli/)**: Executes tasks using the Vercel Labs fx coding-agent CLI (`fx`) with native permission review, Agent Skills support, and narrowly scoped `fx ask` invocations.
-- **[antigravity-cli](skills/antigravity-cli/)**: Executes tasks using Google Antigravity CLI (`agy`) with native fine-grained `allow` / `ask` / `deny` permission resources.
+- **[cursor-agent-cli](skills/cursor-agent-cli/)**: Executes tasks using the Cursor Agent CLI (`cursor-agent`). Provides structured modes for planning, Q&A, and full automation with safety guardrails.
+- **[deepseek-harness-cli](skills/deepseek-harness-cli/)**: Executes coding, review, research, and automation tasks using DeepSeek Harness CLI (`dsh`) via the headless profile. Uses Harness permission presets and profile composition while requiring external containment for untrusted or unattended work. DeepSeek Harness is in developer preview.
+- **[fx-agent-cli](skills/fx-agent-cli/)**: Executes coding, review, research, and automation tasks using the Vercel Labs fx coding-agent CLI (`fx`). Uses fx's native permission review, Agent Skills support, and single-request `fx ask` workflow while requiring external containment for untrusted or unattended work.
+- **[pi-agent-cli](skills/pi-agent-cli/)**: Executes coding, review, research, and automation tasks using the Pi coding agent CLI (`pi`). Uses explicit tool allowlists to apply least privilege and distinguishes project trust from sandboxing.
+- **[route-coding-task](skills/route-coding-task/)**: Selects one coding agent CLI and model using the project's routing rules. Use when the user explicitly asks which agent or model should handle a coding task, requests a routing dry run, or asks to delegate one task using the configured routing policy.
+- **[setup-agent-routing](skills/setup-agent-routing/)**: Configures project-local rules for choosing a coding agent CLI, provider, and model. Use when the user asks to set up or update coding-agent routing, record available subscriptions or models as routing preferences, or customize which agent handles a type of task.
 <!-- END-SKILLS -->
 
 ## Security Convention for CLI Skills
@@ -183,7 +165,8 @@ To enable the plugin for all members of a project, add the following to
 Once installed, skills are available under the `coding-agent-skills` namespace:
 
 ```
-/coding-agent-skills:orchestrating-parallel-tasks
+/coding-agent-skills:setup-agent-routing
+/coding-agent-skills:route-coding-task
 /coding-agent-skills:claude-code-cli
 /coding-agent-skills:codex-cli
 /coding-agent-skills:cursor-agent-cli

@@ -1,7 +1,7 @@
 {
   "name": "coding-agent-skills",
   "version": "0.1.0",
-  "description": "A collection of reusable agent skills for orchestrating parallel tasks and executing work via Claude Code, Codex, Cursor, GitHub Copilot, Pi, Antigravity, and DeepSeek Harness CLIs.",
+  "description": "Reusable skills for choosing a coding agent and model with project-specific routing rules and delegating through native CLI adapters.",
   "author": {
     "name": "yu-iskw",
     "url": "https://github.com/yu-iskw"
@@ -11,7 +11,7 @@
   "keywords": [
     "coding-agent",
     "skills",
-    "orchestration",
+    "routing",
     "claude-code",
     "codex",
     "cursor",
