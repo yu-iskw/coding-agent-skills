@@ -5,10 +5,10 @@ Configure which coding agent, provider, and model to use for a task. The plugin 
 ## Configure agent routing
 
 1. Ask your host to use `setup-agent-routing`. In Claude Code, run `/coding-agent-skills:setup-agent-routing`. Choose the tools and models you can access, then review the proposed `.agents/coding-agent-routing.yaml` in your project.
-2. Ask `route-coding-task` for a dry run, for example, “Which configured agent would review this diff?” It shows the selected target, model, and matching rule.
-3. Request delegation when you want the selected adapter to run the task. You can also invoke any CLI adapter directly.
+2. Ask `route-coding-task` for a dry run, for example, “Which configured agent would review this diff?” It shows the selected target, model, matching rule, and any known blockers without launching another CLI.
+3. Request delegation when you want the selected adapter to run the task. The router checks the destination, installed invocation, authentication, workspace permissions, and required integrations before sending the task. You can also invoke any CLI adapter directly.
 
-The policy uses your own task descriptions as ordered rules. The first match wins, and you can define a default for unmatched tasks. You can choose a different target for an individual request. Keep credentials in each CLI's native authentication flow. For the policy format and a working example, see [Route one coding task](skills/route-coding-task/SKILL.md#policy-format).
+The policy uses your own task descriptions as ordered rules. The first match wins, and you can define a default for unmatched tasks. You can choose a different target for an individual request. Keep credentials in each CLI's native authentication flow. For the policy format and a working example, see [Route one coding task](skills/route-coding-task/SKILL.md#policy-format). To check a host's routing behavior, use the [manual routing cases](docs/evals/routing-cases.md).
 
 When upgrading from a version with the parallel orchestration skills, update prompts that referenced those skills or the coding-orchestrator subagent. Use `route-coding-task` when you want to select a tool and delegate one task.
 
@@ -24,7 +24,7 @@ When upgrading from a version with the parallel orchestration skills, update pro
 - **[deepseek-harness-cli](skills/deepseek-harness-cli/)**: Executes coding, review, research, and automation tasks using DeepSeek Harness CLI (`dsh`) via the headless profile. Uses Harness permission presets and profile composition while requiring external containment for untrusted or unattended work. DeepSeek Harness is in developer preview.
 - **[fx-agent-cli](skills/fx-agent-cli/)**: Executes coding, review, research, and automation tasks using the Vercel Labs fx coding-agent CLI (`fx`). Uses fx's native permission review, Agent Skills support, and single-request `fx ask` workflow while requiring external containment for untrusted or unattended work.
 - **[pi-agent-cli](skills/pi-agent-cli/)**: Executes coding, review, research, and automation tasks using the Pi coding agent CLI (`pi`). Uses explicit tool allowlists to apply least privilege and distinguishes project trust from sandboxing.
-- **[route-coding-task](skills/route-coding-task/)**: Selects one coding agent CLI and model using the project's routing rules. Use when the user explicitly asks which agent or model should handle a coding task, requests a routing dry run, or asks to delegate one task using the configured routing policy.
+- **[route-coding-task](skills/route-coding-task/)**: Selects one coding agent CLI and model using project routing rules. Use when the user asks which agent or model should handle a coding task, requests a dry run, or asks to delegate one task.
 - **[setup-agent-routing](skills/setup-agent-routing/)**: Configures project-local rules for choosing a coding agent CLI, provider, and model. Use when the user asks to set up or update coding-agent routing, record available subscriptions or models as routing preferences, or customize which agent handles a type of task.
 <!-- END-SKILLS -->
 
