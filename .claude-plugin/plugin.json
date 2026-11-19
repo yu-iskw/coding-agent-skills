@@ -1,6 +1,6 @@
 {
   "name": "coding-agent-skills",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Reusable skills for choosing a coding agent and model with project-specific routing rules and delegating through native CLI adapters.",
   "author": {
     "name": "yu-iskw",
